@@ -12,7 +12,7 @@ using namespace std;
 std::map<std::string, std::vector<float>> readHospitalData(const char *fileName)
 {
 	map<std::string, std::vector<float>> map;
-	ifstream input<fileName>;
+	ifstream input(fileName);
 	
 	std::string delimiter = " ";
 	std::string comma = ",";
@@ -67,10 +67,6 @@ std::map<std::string, std::vector<float>> readHospitalData(const char *fileName)
 			size_t pos = 0;
 			size_t pos2 = 0;
 			std::string token, token2;
-			std::string PosofA;
-			std::string PosofStartAGV;
-			std::string PosofEndAGV;
-			std::string PosofHos;
 			
 			//đọc tọa độ và lưu tên khoa vào DeName
 			while ((pos = line.find(delimiter)) != std::string::npos)
@@ -88,16 +84,16 @@ std::map<std::string, std::vector<float>> readHospitalData(const char *fileName)
 			switch (lineNo)
 			{
 				case 11:
-					map[PosofA] = v;
+					map["PosofA"] = v;
 					break;
 				case 12:
-					map[PosofStartAGV] = v;
+					map["PosofStartAGV"] = v;
 					break;
 				case 13:
-					map[PosofEndAGV] = v;
+					map["PosofEndAGV"] = v;
 					break;
 				case 14:
-					map[PosofHos] = v;
+					map["PosofHos"] = v;
 					break;
 				default:
 					break;
