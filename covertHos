@@ -117,7 +117,7 @@ std::vector<json> convertHospitalData(
 			int  num = elem.second.size();
 			for (int i = 0; i < num; i++)
 			{
-				;
+				;			//chưa biết phải dùng dữ liệu ntn?
 			}
 		}
 		
