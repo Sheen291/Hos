@@ -46,6 +46,6 @@ std::vector</*double*/> Utility::ageDistribution(json inputData, int num5_104)
 	else
 	{
 		cout<<"Mẫu dữ liệu tuân theo phân phối chuẩn"<<endl;
-		//cout<<"So nguoi co do tuoi tu 5 den 104"<<count;
+		//cout<<"So nguoi co do tuoi tu 5 den 104"<<count;		// Tạo đến khi p_value > alpha thì do while vào
 	}
 }
