@@ -1514,7 +1514,8 @@ int Utility::getNumAGVCompleted(std::vector<AGV *> agvs)
 
     // Thực hiện kiểm định Shapiro-Wilk - dùng hằng số Shapiro-Wilk như thế nào??
     
-    
+    //vector v chứa vận tốc của 6 loại, dùng inputData đọc từ "walkability" (sau khi đã kiểm định)
+
 }*/
 
     
