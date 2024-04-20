@@ -1512,7 +1512,7 @@ int Utility::getNumAGVCompleted(std::vector<AGV *> agvs)
         samples[i] = samples[i] * sumOfValues / sum;
     }
 
-    // Thực hiện kiểm định Shapiro-Wilk
+    // Thực hiện kiểm định Shapiro-Wilk - dùng hằng số Shapiro-Wilk như thế nào??
     
     
 }*/
