@@ -1481,4 +1481,41 @@ int Utility::getNumAGVCompleted(std::vector<AGV *> agvs)
     //tạo random cho dữ liệu như file input.txt
 }*/
 
+/*std::vector<double> Utility::getPedesVelocity(json inputData,
+                                              float deviationParam)   
+{
+    std::vector<double> v;
+    std::vector<float> samples;
 
+    int lowerBound = int(inputData["walkability"]["distribution"]["normal"]["lowerBound"]);
+    int upperBound = int(inputData["walkability"]["distribution"]["normal"]["upperBound"]);
+    int sumOfValues = int(inputData["numOfAgents"]["value"];
+    int num_samples = int(inputData["walkability"]["distribution"]["normal"]["samples"]);
+
+    //Giá trị trung bình và độ lệch chuẩn
+    float mean = sumOfValues / num_samples;
+    float std_dev = (mean - lowerBound) / 3;    // Giả sử dữ liệu sử dụng nằm trong khoảng 3 độ lệch chuẩn
+    float sum;
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::normal_distribution<double> distribution(mean, std_dev)
+    
+    for (int i=0; i<num_samples; i++)      //tạo mẫu dữ liệu
+    {
+        float random_number = distribution(gen);
+        sum+=random_number;
+        samples.push_back(random_number);
+    }
+    for (int i=0; i<num_samples; i++)        //chuẩn hóa mẫu để tổng bằng numOfValues
+    {
+        samples[i] = samples[i] * sumOfValues / sum;
+    }
+
+    // Thực hiện kiểm định Shapiro-Wilk
+    
+    
+}*/
+
+    
+    
