@@ -1,0 +1,26 @@
+std::vector</*double*/> Utility::ageDistribution(json inputData, int num5_104)
+{
+	int numOfAgents = int(inputData["numOfAgents"]["value"]);
+	int max_value = int(inputData["ageDistribution"]["distribution"]["normal"]["maxValue"]);
+	int min_value = int(intputData["ageDistribution"]["distribution"]["normal"]["maxValue"]);
+	int k = int(inputData["ageDistribution"]["distribution"]["normal"]["numberOfValues"]);
+	
+ 	float mean = (min_value + max_value) / 2;	//Trung bình mẫu
+ 	float std = (max_value - min_value) / 6;	//Độ lệch chuẩn của phân phối chuẩn
+ 	
+ 	std::random_device rd;
+ 	std::mt19937 gen(rd());
+ 	std::normal_distribution<double> distribution(mean, std);
+ 	
+ 	std::vector<float> samples;
+ 	
+ 	for (int i = 0; i < numOfAgents; i++)	//tạo mẫu dữ liệu theo phân bố chuẩn
+ 	{
+ 		float random_number = distribution(gen);
+ 		if (random_number >= min_value && random_number <= max_value)
+		samples.push_back(random_number);
+	}
+	
+	//tính toán giá trị thống kê và p_value
+	
+}
