@@ -93,12 +93,12 @@
     "value": 1
   },
 
-  “ageDistribution” : {
-    “description” : “distribution of age in pedestrians”,
-    “distribution”: {
-	          “normal” : {
-		              “description” : “normal distribution”,
-		              “samples” : "numOfAgents",
+  "ageDistribution": {
+    "description": "distribution of age in pedestrians",
+    "distribution": {
+	          "normal" : {
+		              "description" : "normal distribution",
+		              "samples" : "numOfAgents",
 		              "numberOfValues" : 100,
 		              "minValue" : 5,
 		              "maxValue" : 104
@@ -106,18 +106,18 @@
 		      }
 	},
 
-  “walkability” : {
-      	“description” : “velocity distribution of pedestrians”,
-      	“distribution” : {
-      		“noDisabilityNoOvertaking” : {
+  "walkability" : {
+      	"description" : "velocity distribution of pedestrians",
+      	"distribution" : {
+      		"noDisabilityNoOvertaking": {
           			"description": "Percentage of agents (No disability, without overtaking behavior)",
                 "velocity": 1.24
       		  },
-      		“noDisabilityOvertaking” : {
+      		"noDisabilityOvertaking" : {
                 "description": "Percentage of agents (No disability, with overtaking behavior)",
               			"velocity": 2.48
       		  },
-      		“crutches” : {
+      		"crutches" : {
                 "description": "Percentage of agents (Walking with crutches)",
               	"velocity": 0.94
       		  },
@@ -133,9 +133,9 @@
                 "description": "Percentage of agents (The blind)",
                 "velocity": 0.52
             },
-          “normal” : {
-          			“description” : “normal distribution”,
-          			“samples” : "6",
+          "normal" : {
+          			"description" : "normal distribution",
+          			"samples" : "6",
           			"sumOfValues" : "numOfAgents" ,
           			"lowerBound" : "0",
           			"upperBound" : "10000"
@@ -144,4 +144,50 @@
 	      }
     }
 
+},
+
+"personalityDistribution": {
+	"description" : "distribution of personality in a pedestrian",
+	"distribution": {
+		"open" : {
+			"description" : "open personalities are more optimistic when facing setbacks and will be more active in solving difficulties",
+			"positiveEmotionThreshold" : "0.3",
+			"negativeEmotionThreshold" : "-0.7",
+			"percentage" : 50,
+			"lambda" : 1
+		},
+		"neurotic" : {
+			"description" : "neurotic personalities tend to behave negatively in the face of the same frustration.",
+			"positiveEmotionThreshold" : "0.6",
+			"negativeEmotionThreshold" : "-0.4",
+			"percentage" : 50,
+			"lambda" : 4
+		},
+		"cauttous":{
+			"description" : "_",
+			"positiveEmotionThreshold" : "_",
+			"negativeEmotionThreshold" : "_",
+			"percentage" : _,
+			"lambda" : _
+		},
+		"extroverted":{
+			"description" : "_",
+			"positiveEmotionThreshold" : "_",
+			"negativeEmotionThreshold" : "_",
+			"percentage" : _,
+			"lambda" : _
+		},
+		"agreeable":{
+			"description" : "_",
+			"positiveEmotionThreshold" : "_",
+			"negativeEmotionThreshold" : "_",
+			"percentage" : _,
+			"lambda" : _
+		}
+	},
+	"heuristic" : {
+		"positiveEmotionThreshold" : "0.8",
+		"negativeEmotionThreshold" : "-0.8",
+		}
 }
+
