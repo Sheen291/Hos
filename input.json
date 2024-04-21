@@ -170,3 +170,12 @@
 		}
 }
 
+"insideTimeDistribution": {
+	"description" : "distribution of inside time for a pedestrian"
+	"distribution":{
+		"uniform": {
+			"description" : "uniform distribution",
+			"value" : 10
+		}
+	}
+}
