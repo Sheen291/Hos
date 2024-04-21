@@ -162,27 +162,6 @@
 			"negativeEmotionThreshold" : "-0.4",
 			"percentage" : 50,
 			"lambda" : 4
-		},
-		"cauttous":{
-			"description" : "_",
-			"positiveEmotionThreshold" : "_",
-			"negativeEmotionThreshold" : "_",
-			"percentage" : _,
-			"lambda" : _
-		},
-		"extroverted":{
-			"description" : "_",
-			"positiveEmotionThreshold" : "_",
-			"negativeEmotionThreshold" : "_",
-			"percentage" : _,
-			"lambda" : _
-		},
-		"agreeable":{
-			"description" : "_",
-			"positiveEmotionThreshold" : "_",
-			"negativeEmotionThreshold" : "_",
-			"percentage" : _,
-			"lambda" : _
 		}
 	},
 	"heuristic" : {
