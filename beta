@@ -2,7 +2,7 @@ std::vector<double> Utility::getPedesVelocityBasedDDis(json inputData,
                                                        float deviationParam)
 {
     vector<double> v;
-    /******************************************/
+    /******************************************
     std::vector<float> samples;
 
     int lowerBound = int(inputData["walkability"]["distribution"]["normal"]["lowerBound"]);
@@ -17,7 +17,7 @@ std::vector<double> Utility::getPedesVelocityBasedDDis(json inputData,
 
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::normal_distribution<double> distribution(mean, std_dev)
+    std::normal_distribution<double> distribution(mean, std_dev);
     
     for (int i=0; i<num_samples; i++)      //tạo mẫu dữ liệu
     {
@@ -29,7 +29,7 @@ std::vector<double> Utility::getPedesVelocityBasedDDis(json inputData,
     {
         samples[i] = samples[i] * sumOfValues / sum;
     }
-    /******************************************/
+    ******************************************/
 //chuẩn hóa lại phần trăm 6 loại của Agents
     float perNoDisabilityWithoutOvertaking =
         float(inputData["p1"]["value"]) * deviationParam;
