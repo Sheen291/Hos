@@ -6,7 +6,7 @@
 #include <map>
 #include <lib/nlohmann/json.hpp>
 
-using json = nlohmann::json;
+//using json = nlohmann::json;
 using namespace std;
 
 std::map<std::string, std::vector<float>> readHospitalData(const char *fileName)
@@ -104,7 +104,7 @@ std::map<std::string, std::vector<float>> readHospitalData(const char *fileName)
 	return map;
 }
 
-std::vector<json> convertHospitalData(
+/*std::vector<json> convertHospitalData(
 	std::map<std::string, std::vector<float>> hospitalData)	//truyền map vừa tạo ở trên xuống
 {
 	std::vector<json> data;
@@ -122,4 +122,4 @@ std::vector<json> convertHospitalData(
 		}
 		
 	}
-}
+}*/
