@@ -1,0 +1,99 @@
+std::vector<double> Utility::getPedesVelocityBasedDDis(json inputData,
+                                                       float deviationParam)
+{
+    vector<double> v;
+    /******************************************/
+    std::vector<float> samples;
+
+    int lowerBound = int(inputData["walkability"]["distribution"]["normal"]["lowerBound"]);
+    int upperBound = int(inputData["walkability"]["distribution"]["normal"]["upperBound"]);
+    int sumOfValues = int(inputData["numOfAgents"]["value"];
+    int num_samples = int(inputData["walkability"]["distribution"]["normal"]["samples"]);
+
+    //Giá trị trung bình và độ lệch chuẩn
+    float mean = sumOfValues / num_samples;
+    float std_dev = (mean - lowerBound) / 3;    // Giả sử dữ liệu sử dụng nằm trong khoảng 3 độ lệch chuẩn
+    float sum;
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::normal_distribution<double> distribution(mean, std_dev)
+    
+    for (int i=0; i<num_samples; i++)      //tạo mẫu dữ liệu
+    {
+        float random_number = distribution(gen);
+        sum+=random_number;
+        samples.push_back(random_number);
+    }
+    for (int i=0; i<num_samples; i++)        //chuẩn hóa mẫu để tổng bằng numOfValues
+    {
+        samples[i] = samples[i] * sumOfValues / sum;
+    }
+    /******************************************/
+//chuẩn hóa lại phần trăm 6 loại của Agents
+    float perNoDisabilityWithoutOvertaking =
+        float(inputData["p1"]["value"]) * deviationParam;
+    float perNoDisabilityWithOvertaking =
+        float(inputData["p2"]["value"]) * deviationParam;
+    float perWalkingWithCrutches =
+        float(inputData["p3"]["value"]) * deviationParam;
+    float perWalkingWithSticks = float(inputData["p4"]["value"]) * deviationParam;
+    float perWheelchairs = float(inputData["p5"]["value"]) * deviationParam;
+    // float perTheBlind = inputData["p6"]["value"];
+    float perTheBlind =
+        100 - (perNoDisabilityWithoutOvertaking + perNoDisabilityWithOvertaking +
+               perWalkingWithCrutches + perWalkingWithSticks + perWheelchairs);
+
+    const int nrolls = 10000; // number of experiments
+    const int numPedes =
+        int(int(inputData["numOfAgents"]["value"]) *
+            deviationParam); // maximum number of pedes to distribute
+
+    std::default_random_engine generator;
+    std::discrete_distribution<int> distribution{perNoDisabilityWithoutOvertaking,
+                                                 perNoDisabilityWithOvertaking,
+                                                 perWalkingWithCrutches,
+                                                 perWalkingWithSticks,
+                                                 perWheelchairs,
+                                                 perTheBlind};
+//sẽ sinh ra ngẫu nhiên từ 1 đến 6
+
+    int p[6] = {};
+
+    for (int i = 0; i < nrolls; ++i)
+    {
+        int number = distribution(generator);
+        ++p[number];
+    }
+//đã có giá trị sau 10000 lần thử, tức là có mảng số người trong 6 kiểu người trên 10000 người
+    std::map<int, float> map;
+    map[0] = V1;    //V1..V6 đã khai báo ở Constant.h
+    map[1] = V2;
+    map[2] = V3;
+    map[3] = V4;
+    map[4] = V5;
+    map[5] = V6;
+    /*map[0] = float(inputData["walkability"]["distribution"]["noDisabilityNoOvertaking"]["velocity"]);
+    .
+    .
+    .
+    */
+
+    for (int i = 0; i < 6; ++i)
+    {
+        // std::cout << i << ": " << p[i] * numPedes / nrolls << std::endl;
+        // std::cout << i << ": " << std::string(p[i] * numPedes / nrolls, '*') <<
+        // std::endl;
+        for (int j = 0; j < p[i] * numPedes / nrolls; j++)
+        {
+            v.push_back(map[i]);
+        }
+    }
+    int curSize = v.size();
+    for (int i = 0; i < numPedes - curSize; i++)
+    {
+        v.push_back(map[0]);
+    }
+
+    return v;
+}
