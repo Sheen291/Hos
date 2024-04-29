@@ -3,7 +3,7 @@ std::vector<double> Utility::getPedesVelocityBasedDDis(json inputData,
 {
     vector<double> v;
     /******************************************
-    std::vector<float> samples;
+    
 
     int lowerBound = int(inputData["walkability"]["distribution"]["normal"]["lowerBound"]);
     int upperBound = int(inputData["walkability"]["distribution"]["normal"]["upperBound"]);
@@ -13,23 +13,33 @@ std::vector<double> Utility::getPedesVelocityBasedDDis(json inputData,
     //Giá trị trung bình và độ lệch chuẩn
     float mean = sumOfValues / num_samples;
     float std_dev = (mean - lowerBound) / 3;    // Giả sử dữ liệu sử dụng nằm trong khoảng 3 độ lệch chuẩn
-    float sum;
+    int sum=0, alpha = 0.05;
 
     std::random_device rd;
     std::mt19937 gen(rd());
     std::normal_distribution<double> distribution(mean, std_dev);
-    
-    for (int i=0; i<num_samples; i++)      //tạo mẫu dữ liệu
+    while (check > alpha)
     {
-        float random_number = distribution(gen);
-        sum+=random_number;
-        samples.push_back(random_number);
-    }
-    for (int i=0; i<num_samples; i++)        //chuẩn hóa mẫu để tổng bằng numOfValues
-    {
-        samples[i] = samples[i] * sumOfValues / sum;
+        std::vector<float> p;
+        for (int i=0; i<num_samples; i++)      //tạo mẫu dữ liệu
+        {
+            int random_number = distribution(gen);
+            sum+=random_number;
+            p.push_back(random_number);
+        }
+        for (int i=0; i<num_samples; i++)        //chuẩn hóa mẫu để tổng bằng numOfValues
+        {
+            p[i] = p[i] * sumOfValues / sum;
+        }
+        //Kiểm định Shapiro với alpha = 0.05
+        
+        /*....*/
+        
     }
     ******************************************/
+
+
+  /*
 //chuẩn hóa lại phần trăm 6 loại của Agents
     float perNoDisabilityWithoutOvertaking =
         float(inputData["p1"]["value"]) * deviationParam;
@@ -66,6 +76,9 @@ std::vector<double> Utility::getPedesVelocityBasedDDis(json inputData,
         ++p[number];
     }
 //đã có giá trị sau 10000 lần thử, tức là có mảng số người trong 6 kiểu người trên 10000 người
+    */
+
+
     std::map<int, float> map;
     map[0] = V1;    //V1..V6 đã khai báo ở Constant.h
     map[1] = V2;
@@ -78,19 +91,15 @@ std::vector<double> Utility::getPedesVelocityBasedDDis(json inputData,
     .
     .
     */
-
     for (int i = 0; i < 6; ++i)
     {
-        // std::cout << i << ": " << p[i] * numPedes / nrolls << std::endl;
-        // std::cout << i << ": " << std::string(p[i] * numPedes / nrolls, '*') <<
-        // std::endl;
-        for (int j = 0; j < p[i] * numPedes / nrolls; j++)
+        for (int j = 0; j < p[i]; j++)
         {
             v.push_back(map[i]);
         }
     }
     int curSize = v.size();
-    for (int i = 0; i < numPedes - curSize; i++)
+    for (int i = 0; i < sumOfValues - curSize; i++)
     {
         v.push_back(map[0]);
     }
