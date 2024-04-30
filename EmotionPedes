@@ -1,0 +1,29 @@
+std::vector<std::string> Utility::EmotionOfPedes(json inputData)
+{
+  std::vector<std::string> Emo;
+
+  int numOfAgents = int(inputData["numOfAgents"]["value"]);
+  float perOpen = float(inputData["personality"]["distribution"]["open"]["percentage"]);
+  float perNeurotic = 100 - perOpen;
+  double check = 1.0;
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_real_distribution<> dis(0,1);
+  
+  while (check >= 0.05)    //tạo mẫu đến khi thỏa mãn sai số dưới 5%
+  {
+      int count_open = 0;
+      int count_neurotic = 0;
+      for (int i = 0; i < numOfAgents; i++)      //tạo M phần tử chuỗi tính cách cho M đối tượng
+      {
+        double random_value = dis(gen);
+        if (random_value < 0.5)  {Emo.push_back("open");  ++count_open;}
+        else {Emo.push_back("neurotic");  ++count_neurotic;}
+      }
+    
+      check = std::abs(count_open - count_neurotic) / numOfAgents;
+  }
+
+  return Emo;
+}
+//đã có vector chứa M cảm xúc của M đối tượng con
