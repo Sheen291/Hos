@@ -1,0 +1,48 @@
+// Để có thể dùng được các tùy chọn mới tạo trong Utility thì phải gọi nó ở trong App.cpp
+/*************************(2f)*****************************/
+# Nhập các thư viện cần thiết
+import numpy as np
+import scipy.stats as stats
+
+# Nhập số lượng mẫu, số lượng các giá trị phân biệt, giá trị tối thiểu và giá trị tối đa của mẫu
+n = 3; #int(input("Nhập số lượng mẫu: "))  Số nhân viên y tế.
+k = 10; #int(input("Nhập số lượng các giá trị phân biệt của mẫu: "))    10 khoa để phân phối
+min_value = 0; #float(input("Nhập giá trị tối thiểu của mẫu: "))
+max_value = 9; #float(input("Nhập giá trị tối đa của mẫu: "))
+
+# Sinh ra ngẫu nhiên các giá trị của mẫu tuân theo phân bố chuẩn
+# Bạn có thể thay đổi các tham số trung bình (mean) và độ lệch chuẩn (std) theo ý muốn
+mean = (min_value + max_value) / 2 # Trung bình của phân bố chuẩn
+std = (max_value - min_value) / 6 # Độ lệch chuẩn của phân bố chuẩn
+sample = np.random.normal(mean, std, n) # Mẫu dữ liệu tuân theo phân bố chuẩn
+sample = np.clip(sample, min_value, max_value) # Cắt bớt các giá trị ngoài khoảng [min_value, max_value]
+sample = np.round(sample, 1)
+
+sample_int = sample.astype(int)     #ép về kiểu int
+
+stat, p_value = stats.shapiro(sample_int) # Tính toán giá trị thống kê và giá trị p_value
+
+# In ra giá trị p_value
+print("Giá trị p_value là: ")
+print(p_value)
+
+# Đặt mức ý nghĩa thống kê (significance level) là 0.05
+# Nếu giá trị p_value nhỏ hơn mức ý nghĩa thống kê, ta bác bỏ giả thuyết không và kết luận mẫu dữ liệu không tuân theo phân bố chuẩn
+# Nếu giá trị p_value lớn hơn hoặc bằng mức ý nghĩa thống kê, ta không bác bỏ giả thuyết không và kết luận mẫu dữ liệu tuân theo phân bố chuẩn
+alpha = 0.05 # Mức ý nghĩa thống kê
+if p_value < alpha:
+    print("Mẫu dữ liệu không tuân theo phân bố Shapiro-Wilk")
+else:
+    #print("Mẫu dữ liệu tuân theo phân bố Shapiro-Wilk")
+    # In ra mẫu dữ liệu
+    print("Mẫu dữ liệu tuân theo phân bố Shapiro-Wilk là: ")
+    print(sample_int)
+
+    print("Gia tri cuc tieu la: ")
+    print(np.min(sample_int))
+
+    print("Gia tri cuc dai la: ")
+    print(np.max(sample_int))
+
+#mỗi số sẽ switch-case sang 1 khoa, lưu vào data là 1 vector<int> và đưa ra khoa start tương ứng
+
