@@ -44,5 +44,5 @@ else:
     print("Gia tri cuc dai la: ")
     print(np.max(sample_int))
 
-#mỗi số sẽ switch-case sang 1 khoa, lưu vào data là 1 vector<int> và đưa ra khoa start tương ứng
+#Mỗi số sẽ switch-case sang 1 khoa, lưu vào data là 1 vector<int> và đưa ra khoa start tương ứng
 
