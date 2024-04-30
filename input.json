@@ -195,6 +195,48 @@
 		}
 },
 
+"wardDistribution" : {
+"description" : "distribution of wards for personels",
+"distribution": {
+	"A" : {
+		"description" : "work at Administration Center",
+	},
+	"B" : {
+		"description" : "work at Brain Center",
+	},
+	"E" : {
+		"description" : "work at E Center",
+	},
+	"F" : {
+		"description" : "work at F Center",
+	},
+	"G" : {
+		"description" : "work at G Center",
+	},
+	"L" : {
+		"description" : "work at L Center",
+	},
+	"M" : {
+		"description" : "work at M Center",
+	},
+	"N" : {
+		"description" : "work at N Center",
+	},
+	"K" : {
+		"description" : "work at K Center",
+	},
+	"W" : {
+		"description" : "work at G Center",
+	},
+	"normal" : {
+		"description" : "normal distribution",
+		"samples" : "13",
+		"sumOfValues" : "forPersonel" ,
+		"lowerBound" : "0",
+		"upperBound" : "10000"
+	}
+}
+},
 
 "insideTimeDistribution": {
 	"description" : "distribution of inside time for a pedestrian"
@@ -204,4 +246,4 @@
 			"value" : 10
 		}
 	}
-}
+},
