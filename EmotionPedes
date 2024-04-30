@@ -28,3 +28,5 @@ std::vector<std::string> Utility::EmotionOfPedes(json inputData)
 }
 //đã có vector chứa M cảm xúc của M đối tượng con
 //sau cần thêm vài điều kiện ở câu 3
+//Hiện tại vẫn chưa biết các thông số bên trong 2 tính cách có 
+//cần đi kèm theo tên tính cách hay không, nên là để đó sau chữa tiếp
