@@ -27,3 +27,4 @@ std::vector<std::string> Utility::EmotionOfPedes(json inputData)
   return Emo;
 }
 //đã có vector chứa M cảm xúc của M đối tượng con
+//sau cần thêm vài điều kiện ở câu 3
