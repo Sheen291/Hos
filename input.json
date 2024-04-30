@@ -168,7 +168,33 @@
 		"positiveEmotionThreshold" : "0.8",
 		"negativeEmotionThreshold" : "-0.8",
 		}
-}
+},
+
+"journeyDistribution": {
+	"description" : "distribution of number of wards in a journey",
+	"distribution": {
+		"forPatient" : {
+			"description" : "number of wards that a patient must visit",
+			"value" : "3",
+			"start" : "A",
+			"end": "A",
+			},
+		"forVisitor" : {
+			"description" : "number of wards that a visitor must visit",
+			"value" : "1",
+			"start" : "A",
+			"end": "A",
+			},
+		"forPersonel" : {
+			"description" : "number of wards that a personel must visit",
+			"value" : "3",
+			"start" : "wardDistribution",
+			"end": "start",
+			"threshold" : "noDisabilityNoOvertaking + noDisabilityOvertaking"
+			}
+		}
+},
+
 
 "insideTimeDistribution": {
 	"description" : "distribution of inside time for a pedestrian"
