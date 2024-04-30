@@ -1,7 +1,7 @@
 std::vector<double> Utility::getPedesVelocityBasedDDis(json inputData,
                                                        float deviationParam)
 {
-    vector<double> v;
+    std::vector<double> v;
     /******************************************
     
 
