@@ -1,5 +1,5 @@
 //#include <cmath>
-std::vector</*double*/> Utility::ageDistribution(json inputData, int num5_104)
+std::vector</*double*/> Utility::ageDistribution(json inputData)
 {
 	int numOfAgents = int(inputData["numOfAgents"]["value"]);
 	int max_value = int(inputData["ageDistribution"]["distribution"]["normal"]["maxValue"]);
