@@ -9,7 +9,7 @@
 //using json = nlohmann::json;
 using namespace std;
 
-std::map<std::string, std::vector<float>> readHospitalData(const char *fileName)
+std::map<std::string, std::vector<float>> Utility::readHospitalData(const char *fileName)
 {
 	map<std::string, vector<float>> map;
 	ifstream input(fileName);
