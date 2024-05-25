@@ -199,34 +199,34 @@
 "description" : "distribution of wards for personels",
 "distribution": {
 	"A" : {
-		"description" : "work at Administration Center",
+		"description" : "work at Administration Center"
 	},
 	"B" : {
-		"description" : "work at Brain Center",
+		"description" : "work at Brain Center"
 	},
 	"E" : {
-		"description" : "work at E Center",
+		"description" : "work at E Center"
 	},
 	"F" : {
-		"description" : "work at F Center",
+		"description" : "work at F Center"
 	},
 	"G" : {
-		"description" : "work at G Center",
+		"description" : "work at G Center"
 	},
 	"L" : {
-		"description" : "work at L Center",
+		"description" : "work at L Center"
 	},
 	"M" : {
-		"description" : "work at M Center",
+		"description" : "work at M Center"
 	},
 	"N" : {
-		"description" : "work at N Center",
+		"description" : "work at N Center"
 	},
 	"K" : {
-		"description" : "work at K Center",
+		"description" : "work at K Center"
 	},
 	"W" : {
-		"description" : "work at G Center",
+		"description" : "work at G Center"
 	},
 	"normal" : {
 		"description" : "normal distribution",
