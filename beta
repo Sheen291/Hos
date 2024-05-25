@@ -33,7 +33,7 @@ std::vector<double> Utility::getPedesVelocityBasedDDis(json inputData,
         }
         //Kiểm định Shapiro với alpha = 0.05
         
-        /*gọi python vào r chuyền vector p cho nó để kiểm định*/
+        /*gọi python vào r truyền vector p cho nó để kiểm định*/
         
     }
     ******************************************/
