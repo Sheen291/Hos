@@ -94,13 +94,13 @@ void createAGVs()
     // test
     if ((int)inputData["runMode"]["value"] == 0)
     {
-        for (int i = 0; i < juncData.size(); i++)
+        for (int i = 0; i < juncData.size(); i++)    //số lượng agv
         {
             if (juncData.size() == 4)
             {
                 array = {0, 1, 2};
             }
-            else if (juncData.size() == 3)  //chỉ có 3 
+            else if (juncData.size() == 3)  
             {
                 if (i == 0)
                 {
@@ -125,7 +125,10 @@ void createAGVs()
                 agv = new AGV();
                 vector<Point3f> route = Utility::getRouteAGV(i, j, walkwayWidth, juncData);
                 agv->setDirection(i, j);
-                agv->setPosition(route[0].x, route[0].y);
+
+                //set toa độ vị trí đầu bắt đầu cho agv, đọc từ hospital.txt tọa độ ban đầu(thay sau)
+
+                agv->setPosition(route[0].x, route[0].y);    //lưu tọa độ ban đầu agv
 
                 // for (Agent *agent : socialForce->getCrowd())
                 // {
@@ -138,15 +141,17 @@ void createAGVs()
                 //     }
                 // }
 
-                agv->setDestination(route[route.size() - 1].x, route[route.size() - 1].y);
-                agv->setDesiredSpeed(0.6F);
+                //thuộc tính trong moveObject
+
+                agv->setDestination(route[route.size() - 1].x, route[route.size() - 1].y);       //set đích đến (trong hospital có tọa độ đích)(tọa độ cuối cùng)
+                agv->setDesiredSpeed(0.6F);    //tốc độ mong muốn
                 agv->setAcceleration(inputData["acceleration"]["value"]);
                 agv->setThresholdDisToPedes((float)inputData["thresDistance"]["value"]);
                 for (int i = 1; i < route.size(); i++)
                 {
                     agv->setPath(route[i].x, route[i].y, 1.0);
                 }
-                socialForce->addAGV(agv);
+                socialForce->addAGV(agv);    //thêm agv vừa tạo vào list agv
             }
         }
     }
@@ -207,4 +212,457 @@ void createAGVs()
 
 
 /***************************************************************************************/
+
+
+//Các phần liên quan bên Utility
+
+std::vector<Point3f> Utility::getRouteAGV(int src, int turningDirection,
+                                          float walkwayWidth,
+                                          std::vector<float> juncData)
+{
+    std::vector<Point3f> v;
+    int junctionType = juncData.size();
+    if (junctionType == 2)
+    {
+        v = getRouteAGVHallway(src, walkwayWidth, juncData);
+    }
+    else if (junctionType == 3)
+    {
+        v = getRouteAGVTJunction(src, turningDirection, walkwayWidth, juncData);
+    }
+    else if (junctionType == 4)
+    {
+        v = getRouteAGVCrossRoad(src, turningDirection, walkwayWidth, juncData);
+    }
+    return v;
+}
+
+// src = {0, 1, 2} ~ Go from Left, Bottom, Right side
+std::vector<Point3f> Utility::getRouteAGVHallway(int src, float walkwayWidth,
+                                                 std::vector<float> juncData)
+{
+    std::vector<Point3f> v;
+
+    float leftWidthLimit = -juncData[0] - walkwayWidth / 2;
+    float rightWidthLimit = juncData[1] + walkwayWidth / 2;
+
+    if (src == 0)
+    {
+        v.insert(v.end(), {Point3f(leftWidthLimit - 1, -walkwayWidth / 3, 0.0),
+                           Point3f(rightWidthLimit + 1, -walkwayWidth / 3, 0.0)});
+        v.insert(v.end(), {Point3f(rightWidthLimit + 2, -walkwayWidth / 3, 0.0)});
+        return v;
+    }
+    else
+    {
+        v.insert(v.end(), {Point3f(rightWidthLimit + 1, walkwayWidth / 3, 0.0),
+                           Point3f(leftWidthLimit - 1, walkwayWidth / 3, 0.0)});
+        v.insert(v.end(), {Point3f(leftWidthLimit - 2, walkwayWidth / 3, 0.0)});
+        return v;
+    }
+
+    return v;
+}
+
+// src = {0, 1, 2} ~ Go from Left, Bottom, Right side
+// turningDirection = {0, 1, 2} - Turn Left, Go Straight, Turn Right
+std::vector<Point3f> Utility::getRouteAGVTJunction(
+    int src, int turningDirection, float walkwayWidth,
+    std::vector<float> juncData)
+{
+    std::vector<Point3f> v;
+
+    float horWalkwayWidth = walkwayWidth;
+    float verWalkwayWidth = walkwayWidth;
+
+    float posVerAsymtote = verWalkwayWidth / 2;
+    float negVerAsymtote = -verWalkwayWidth / 2;
+
+    float posHorAsymtote = horWalkwayWidth / 2;
+    // float negHorAsymtote = -horWalkwayWidth / 2;
+
+    float leftWidthLimit = -juncData[0] - walkwayWidth / 2;
+    float rightWidthLimit = juncData[2] + walkwayWidth / 2;
+
+    float lowerHeightLimit = -juncData[1] - walkwayWidth / 2;
+
+    switch (src)
+    {
+        // Go From Left side
+    case 0:
+    {
+        switch (turningDirection)
+        {
+        case 0:
+            // Go Straight
+        case 1:
+        {
+            v.insert(v.end(),
+                     {Point3f(leftWidthLimit - 1, -horWalkwayWidth / 3, 0.0),
+                      Point3f(rightWidthLimit + 1, -horWalkwayWidth / 3, 0.0)});
+            v.insert(v.end(),
+                     {Point3f(rightWidthLimit + 2, -horWalkwayWidth / 3, 0.0)});
+            return v;
+            break;
+        }
+            // Turn Right
+        case 2:
+        {
+            v.insert(
+                v.end(),
+                {Point3f(leftWidthLimit - 1, -horWalkwayWidth / 3, 0.0),
+                 Point3f(-verWalkwayWidth / 2, -horWalkwayWidth / 3, 0.0),
+                 Point3f(-verWalkwayWidth / 3.5, -horWalkwayWidth / 2.5, 0.0),
+                 Point3f(-verWalkwayWidth / 3.5, -horWalkwayWidth / 2, 0.0)});
+            v.insert(v.end(),
+                     {Point3f(-verWalkwayWidth / 3, lowerHeightLimit - 1, 0.0),
+                      Point3f(-verWalkwayWidth / 3, lowerHeightLimit - 2, 0.0)});
+            return v;
+            break;
+        }
+        default:
+            break;
+        }
+        break;
+    }
+    // Go From Bottom side
+    case 1:
+    {
+        switch (turningDirection)
+        {
+        // Turn Left
+        case 0:
+        {
+            for (int x = verWalkwayWidth / 3; x >= leftWidthLimit - 1; x--)
+            {
+                float y = getCoor(x, posVerAsymtote, posHorAsymtote);
+                if (y > horWalkwayWidth / 3)
+                {
+                    y = horWalkwayWidth / 3;
+                }
+                v.push_back(Point3f(x, y, 0.0));
+            }
+            Point3f checker = v.front();
+            if (checker.y > lowerHeightLimit)
+            {
+                v.insert(v.begin(), Point3f(checker.x, lowerHeightLimit - 1, 0.0));
+            }
+            return v;
+            break;
+        }
+            // Go Straight
+        case 1:
+            // Turn Right
+        case 2:
+        {
+            v.insert(v.end(),
+                     {Point3f(verWalkwayWidth / 3, lowerHeightLimit - 1, 0.0),
+                      Point3f(verWalkwayWidth / 3, -horWalkwayWidth / 2, 0.0),
+                      Point3f(verWalkwayWidth / 2.5, -horWalkwayWidth / 3.5, 0.0),
+                      Point3f(verWalkwayWidth / 2, -horWalkwayWidth / 3.5, 0.0)});
+            v.insert(v.end(),
+                     {Point3f(rightWidthLimit + 1, -horWalkwayWidth / 3, 0.0),
+                      Point3f(rightWidthLimit + 2, -horWalkwayWidth / 3, 0.0)});
+            return v;
+            break;
+        }
+        default:
+            break;
+        }
+        break;
+    }
+    // Go from Right side
+    case 2:
+        switch (turningDirection)
+        {
+        // Turn Left
+        case 0:
+        {
+            for (int x = rightWidthLimit + 1; x >= -verWalkwayWidth / 3; x--)
+            {
+                float y = getCoor(x, negVerAsymtote, posHorAsymtote);
+                if (y > horWalkwayWidth / 3)
+                {
+                    y = horWalkwayWidth / 3;
+                }
+                v.push_back(Point3f(x, y, 0.0));
+            }
+            Point3f checker = v.back();
+            if (checker.y > lowerHeightLimit)
+            {
+                v.push_back(Point3f(checker.x, lowerHeightLimit - 1, 0.0));
+            }
+            return v;
+            break;
+        }
+            // Go Straight
+        case 1:
+        {
+            v.insert(v.end(),
+                     {Point3f(rightWidthLimit + 1, horWalkwayWidth / 3, 0.0),
+                      Point3f(leftWidthLimit - 1, horWalkwayWidth / 3, 0.0)});
+            v.insert(v.end(),
+                     {Point3f(leftWidthLimit - 2, horWalkwayWidth / 3, 0.0)});
+            return v;
+            break;
+        }
+        default:
+            break;
+        }
+        break;
+    default:
+        break;
+    }
+
+    return v;
+}
+
+// src = {0, 1, 2, 3} ~ Go from Left, Bottom, Right, Top side
+// turningDirection = {0, 1, 2} - Turn Left, Go Straight, Turn Right
+std::vector<Point3f> Utility::getRouteAGVCrossRoad(
+    int src, int turningDirection, float walkwayWidth,
+    std::vector<float> juncData)
+{
+    float horWalkwayWidth = walkwayWidth;
+    float verWalkwayWidth = walkwayWidth;
+
+    float posVerAsymtote = verWalkwayWidth / 2;
+    float negVerAsymtote = -verWalkwayWidth / 2;
+
+    float posHorAsymtote = horWalkwayWidth / 2;
+    float negHorAsymtote = -horWalkwayWidth / 2;
+
+    float leftWidthLimit = -juncData[0] - walkwayWidth / 2;
+    float rightWidthLimit = juncData[2] + walkwayWidth / 2;
+
+    float lowerHeightLimit = -juncData[1] - walkwayWidth / 2;
+    float upperHeightLimit = juncData[3] + walkwayWidth / 2;
+
+    std::vector<Point3f> v;
+    switch (src)
+    {
+    // Go from Left side
+    case 0:
+        switch (turningDirection)
+        {
+        // Turn Left
+        case 0:
+        {
+            for (int x = leftWidthLimit - 1; x <= verWalkwayWidth / 3; x++)
+            {
+                float y = getCoor(x, posVerAsymtote, negHorAsymtote);
+                if (y < -horWalkwayWidth / 3)
+                {
+                    y = -horWalkwayWidth / 3;
+                }
+                v.push_back(Point3f(x, y, 0.0));
+            }
+            Point3f checker = v.back();
+            if (checker.y < upperHeightLimit)
+            {
+                v.push_back(Point3f(checker.x, upperHeightLimit + 1, 0.0));
+            }
+            return v;
+            break;
+        }
+            // Go Straight
+        case 1:
+        {
+            v.insert(v.end(),
+                     {Point3f(leftWidthLimit - 1, -horWalkwayWidth / 3, 0.0),
+                      Point3f(rightWidthLimit + 1, -horWalkwayWidth / 3, 0.0)});
+            v.insert(v.end(),
+                     {Point3f(rightWidthLimit + 2, -horWalkwayWidth / 3, 0.0)});
+            return v;
+            break;
+        }
+            // Turn Right
+        case 2:
+        {
+            v.insert(
+                v.end(),
+                {Point3f(leftWidthLimit - 1, -horWalkwayWidth / 3, 0.0),
+                 Point3f(-verWalkwayWidth / 2, -horWalkwayWidth / 3, 0.0),
+                 Point3f(-verWalkwayWidth / 3.5, -horWalkwayWidth / 2.5, 0.0),
+                 Point3f(-verWalkwayWidth / 3.5, -horWalkwayWidth / 2, 0.0)});
+            v.insert(v.end(),
+                     {Point3f(-verWalkwayWidth / 3, lowerHeightLimit - 1, 0.0),
+                      Point3f(-verWalkwayWidth / 3, lowerHeightLimit - 2, 0.0)});
+            return v;
+            break;
+        }
+        default:
+            break;
+        }
+        break;
+
+        // Go from Bottom side
+    case 1:
+        switch (turningDirection)
+        {
+        // Turn Left
+        case 0:
+        {
+            for (int x = verWalkwayWidth / 3; x >= leftWidthLimit - 1; x--)
+            {
+                float y = getCoor(x, posVerAsymtote, posHorAsymtote);
+                if (y > horWalkwayWidth / 3)
+                {
+                    y = horWalkwayWidth / 3;
+                }
+                v.push_back(Point3f(x, y, 0.0));
+            }
+            Point3f checker = v.front();
+            if (checker.y > lowerHeightLimit)
+            {
+                v.insert(v.begin(), Point3f(checker.x, lowerHeightLimit - 1, 0.0));
+            }
+            return v;
+            break;
+        }
+            // Go Straight
+        case 1:
+        {
+            v.insert(v.end(),
+                     {Point3f(verWalkwayWidth / 3, lowerHeightLimit - 1, 0.0),
+                      Point3f(verWalkwayWidth / 3, upperHeightLimit + 1, 0.0)});
+            v.insert(v.end(),
+                     {Point3f(verWalkwayWidth / 3, upperHeightLimit + 2, 0.0)});
+            return v;
+            break;
+        }
+            // Turn Right
+        case 2:
+        {
+            v.insert(v.end(),
+                     {Point3f(verWalkwayWidth / 3, lowerHeightLimit - 1, 0.0),
+                      Point3f(verWalkwayWidth / 3, -horWalkwayWidth / 2, 0.0),
+                      Point3f(verWalkwayWidth / 2.5, -horWalkwayWidth / 3.5, 0.0),
+                      Point3f(verWalkwayWidth / 2, -horWalkwayWidth / 3.5, 0.0)});
+            v.insert(v.end(),
+                     {Point3f(rightWidthLimit + 1, -horWalkwayWidth / 3, 0.0),
+                      Point3f(rightWidthLimit + 2, -horWalkwayWidth / 3, 0.0)});
+            return v;
+            break;
+        }
+        default:
+            break;
+        }
+        break;
+
+        // Go from Right side
+    case 2:
+        switch (turningDirection)
+        {
+        // Turn Left
+        case 0:
+        {
+            for (int x = rightWidthLimit + 1; x >= -verWalkwayWidth / 3; x--)
+            {
+                float y = getCoor(x, negVerAsymtote, posHorAsymtote);
+                if (y > horWalkwayWidth / 3)
+                {
+                    y = horWalkwayWidth / 3;
+                }
+                v.push_back(Point3f(x, y, 0.0));
+            }
+            Point3f checker = v.back();
+            if (checker.y > lowerHeightLimit)
+            {
+                v.push_back(Point3f(checker.x, lowerHeightLimit - 1, 0.0));
+            }
+            return v;
+            break;
+        }
+            // Go Straight
+        case 1:
+        {
+            v.insert(v.end(),
+                     {Point3f(rightWidthLimit + 1, horWalkwayWidth / 3, 0.0),
+                      Point3f(leftWidthLimit - 1, horWalkwayWidth / 3, 0.0)});
+            v.insert(v.end(),
+                     {Point3f(leftWidthLimit - 2, horWalkwayWidth / 3, 0.0)});
+            return v;
+            break;
+        }
+            // Turn Right
+        case 2:
+        {
+            v.insert(v.end(),
+                     {Point3f(rightWidthLimit + 1, horWalkwayWidth / 3, 0.0),
+                      Point3f(verWalkwayWidth / 2, horWalkwayWidth / 3, 0.0),
+                      Point3f(verWalkwayWidth / 3.5, horWalkwayWidth / 2.5, 0.0),
+                      Point3f(verWalkwayWidth / 3.5, horWalkwayWidth / 2, 0.0)});
+            v.insert(v.end(),
+                     {Point3f(verWalkwayWidth / 3, upperHeightLimit + 1, 0.0),
+                      Point3f(verWalkwayWidth / 3, upperHeightLimit + 2, 0.0)});
+            return v;
+            break;
+        }
+        default:
+            break;
+        }
+        break;
+
+        // Go from Top side
+    case 3:
+        switch (turningDirection)
+        {
+        // Turn Left
+        case 0:
+        {
+            for (int x = -verWalkwayWidth / 3; x <= rightWidthLimit + 1; x++)
+            {
+                float y = getCoor(x, negVerAsymtote, negHorAsymtote);
+                if (y < -horWalkwayWidth / 3)
+                {
+                    y = -horWalkwayWidth / 3;
+                }
+                v.push_back(Point3f(x, y, 0.0));
+            }
+            Point3f checker = v.front();
+            if (checker.y < upperHeightLimit)
+            {
+                v.insert(v.begin(), Point3f(checker.x, upperHeightLimit + 1, 0.0));
+            }
+            return v;
+            break;
+        }
+            // Go Straight
+        case 1:
+        {
+            v.insert(v.end(),
+                     {Point3f(-verWalkwayWidth / 3, upperHeightLimit + 1, 0.0),
+                      Point3f(-verWalkwayWidth / 3, lowerHeightLimit - 1, 0.0)});
+            v.insert(v.end(),
+                     {Point3f(-verWalkwayWidth / 3, lowerHeightLimit - 2, 0.0)});
+            return v;
+            break;
+        }
+            // Turn Right
+        case 2:
+        {
+            v.insert(v.end(),
+                     {Point3f(-verWalkwayWidth / 3, upperHeightLimit + 1, 0.0),
+                      Point3f(-verWalkwayWidth / 3, horWalkwayWidth / 2, 0.0),
+                      Point3f(-verWalkwayWidth / 2.5, horWalkwayWidth / 3.5, 0.0),
+                      Point3f(-verWalkwayWidth / 2, horWalkwayWidth / 3.5, 0.0)});
+            v.insert(v.end(),
+                     {Point3f(leftWidthLimit - 1, horWalkwayWidth / 3, 0.0),
+                      Point3f(leftWidthLimit - 2, horWalkwayWidth / 3, 0.0)});
+            return v;
+            break;
+        }
+        default:
+            break;
+        }
+        break;
+    default:
+        break;
+    }
+    return v;
+}
+
+
+
 
