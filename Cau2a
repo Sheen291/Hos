@@ -40,7 +40,7 @@ if ((int)inputData["runMode"]["value"] == 0)
             }
         } while (input1 != "1" && input1 != "2");
     }
-    else  //nếu runmode khác 0 thì 
+    else  //nếu runmode khác 0 thì ....
     {
         juncDataList = Utility::convertMapData(mapData);
         float hallwayLength = juncDataList[juncIndex].items().begin().value();  //??
@@ -57,6 +57,7 @@ if ((int)inputData["runMode"]["value"] == 0)
 
 /*****************************************************************************************************/
 
+//route[] là dữ liệu có được từ getRouteAGV bên dưới 
 
 void createAGVs()
 {
@@ -92,9 +93,9 @@ void createAGVs()
     // socialForce->addAGV(agv);
 
     // test
-    if ((int)inputData["runMode"]["value"] == 0)
+    if ((int)inputData["runMode"]["value"] == 0)   //tạo ra "junction.size()" con agv
     {
-        for (int i = 0; i < juncData.size(); i++)    //số lượng agv
+        for (int i = 0; i < juncData.size(); i++)    //số lượng agv, khả năng là ngã 2 3 4
         {
             if (juncData.size() == 4)
             {
@@ -141,12 +142,12 @@ void createAGVs()
                 //     }
                 // }
 
-                //thuộc tính trong moveObject
+                //thuộc tính trong MoveObject, AGV, 
 
                 agv->setDestination(route[route.size() - 1].x, route[route.size() - 1].y);       //set đích đến (trong hospital có tọa độ đích)(tọa độ cuối cùng)
                 agv->setDesiredSpeed(0.6F);    //tốc độ mong muốn
-                agv->setAcceleration(inputData["acceleration"]["value"]);
-                agv->setThresholdDisToPedes((float)inputData["thresDistance"]["value"]);
+                agv->setAcceleration(inputData["acceleration"]["value"]);    //set gia tốc
+                agv->setThresholdDisToPedes((float)inputData["thresDistance"]["value"]);    //ngưỡng khoảng cách để agv dừng
                 for (int i = 1; i < route.size(); i++)
                 {
                     agv->setPath(route[i].x, route[i].y, 1.0);
@@ -155,21 +156,21 @@ void createAGVs()
             }
         }
     }
-    else
+    else    //runmode == 1
     {
         int numOfHallway = juncDataList.size();
-        int numRunPerHallway = (int)inputData["noRunPerHallway"]["value"];
+        int numRunPerHallway = (int)inputData["noRunPerHallway"]["value"];    //số lần chạy qua hành lang
         int juncIndexTemp = 0;
         float hallwayLength = juncDataList[juncIndexTemp].items().begin().value();
         cout << "*****=> " << juncDataList[juncIndex].items().begin().key() << ": " << hallwayLength << endl;
-        float length1Side = (hallwayLength) / 2;
-        vector<float> juncDataTemp = {length1Side, length1Side};
-        int numAGVPerRun = 1;
-        if ((int)inputData["runConcurrently"]["value"] == 1)
+        float length1Side = (hallwayLength) / 2;        //vẫn là khoảng cách 2 hành lang/2
+        vector<float> juncDataTemp = {length1Side, length1Side};   
+        int numAGVPerRun = 1;        //số lượng agv đang chạy
+        if ((int)inputData["runConcurrently"]["value"] == 1)    //số lượng agv có thể chạy đồng thời
         {
             numAGVPerRun = 2;
         }
-        for (int i = 0; i < numOfHallway * numRunPerHallway; i++)
+        for (int i = 0; i < numOfHallway * numRunPerHallway; i++)    //tạo ra số lượng agv
         {
             for (int j = 0; j < numAGVPerRun; j++)
             {
@@ -218,9 +219,9 @@ void createAGVs()
 
 std::vector<Point3f> Utility::getRouteAGV(int src, int turningDirection,
                                           float walkwayWidth,
-                                          std::vector<float> juncData)
+                                          std::vector<float> juncData)        //truyền vào ..., ...., độ rộng hl, 
 {
-    std::vector<Point3f> v;
+    std::vector<Point3f> v;    //point3f = 3 float (trong vecmath)
     int junctionType = juncData.size();
     if (junctionType == 2)
     {
@@ -663,6 +664,15 @@ std::vector<Point3f> Utility::getRouteAGVCrossRoad(
     return v;
 }
 
+/********************/
+
+vector<float> position = Utility::getPedesSource(
+        codeSrc,
+        (float)inputData["totalCrowdLength"]["value"],
+        (float)inputData["headCrowdLength"]["value"],
+        (float)inputData["crowdWidth"]["value"],
+        walkwayWidth,
+        juncData);
 
 
 
