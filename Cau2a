@@ -35,7 +35,7 @@ if ((int)inputData["runMode"]["value"] == 0)
                     }
 
                 } while (mapData[juncName].size() < 3);  //chỉ chọn các J1 J2 J3 J4
-                juncData = mapData[juncName];  //juncData là vector kiểm float, lưu vào phần values của map bên mapData[juncname], juncname thì được random ở trên
+                juncData = mapData[juncName];  //juncData là vector kiểu float, lưu vào phần values của map bên mapData[juncname], juncname thì được random ở trên
                 walkwayWidth = mapData["walkwayWidth"][0];  //lấy giá trị 6 ra (6 là độ rộng hành lang)
             }
         } while (input1 != "1" && input1 != "2");
@@ -99,26 +99,26 @@ void createAGVs()
         {
             if (juncData.size() == 4)
             {
-                array = {0, 1, 2};
+                array = {0, 1, 2};    //0= rẽ trái, 1 = đi xuống dưới, 2 = rẽ phải
             }
             else if (juncData.size() == 3)  
             {
                 if (i == 0)
                 {
-                    array = {1, 2};
+                    array = {1, 2};    //đi xuống dưới hoặc rẽ phải
                 }
                 else if (i == 1)
                 {
-                    array = {0, 2};
+                    array = {0, 2}; //hoặc rẽ trái hoặc rẽ phải
                 }
                 else
                 {
-                    array = {0, 1};
+                    array = {0, 1};    //hoặc rẽ trái hoặc xuống dưới
                 }
             }
             else if (juncData.size() == 2)  //độ rộng hành lang
             {
-                array = {1};
+                array = {1};        //chỉ còn đi lùi (tiến không có trong mảng, tiến thì giữ nguyên)
             }
 
             for (int j : array)
@@ -219,39 +219,39 @@ void createAGVs()
 
 std::vector<Point3f> Utility::getRouteAGV(int src, int turningDirection,
                                           float walkwayWidth,
-                                          std::vector<float> juncData)        //truyền vào ..., ...., độ rộng hl, 
+                                          std::vector<float> juncData)        //truyền vào kiểu ngã (3, 4), j(rẽ trái-quay đầu-rẽ phải), độ rộng hl, ...
 {
     std::vector<Point3f> v;    //point3f = 3 float (trong vecmath)
     int junctionType = juncData.size();
     if (junctionType == 2)
     {
-        v = getRouteAGVHallway(src, walkwayWidth, juncData);
+        v = getRouteAGVHallway(src, walkwayWidth, juncData);    //đi trên hành lang, cách tường bằng độ rộng hành lang/2
     }
-    else if (junctionType == 3)
+    else if (junctionType == 3)    //ngã 3
     {
         v = getRouteAGVTJunction(src, turningDirection, walkwayWidth, juncData);
     }
-    else if (junctionType == 4)
+    else if (junctionType == 4)    //ngã 4
     {
         v = getRouteAGVCrossRoad(src, turningDirection, walkwayWidth, juncData);
     }
-    return v;
+    return v;        //trả về vector v chứa các phần tử có 3 float
 }
 
 // src = {0, 1, 2} ~ Go from Left, Bottom, Right side
 std::vector<Point3f> Utility::getRouteAGVHallway(int src, float walkwayWidth,
-                                                 std::vector<float> juncData)
+                                                 std::vector<float> juncData)        //đi trên hành lang
 {
     std::vector<Point3f> v;
 
-    float leftWidthLimit = -juncData[0] - walkwayWidth / 2;
+    float leftWidthLimit = -juncData[0] - walkwayWidth / 2;   
     float rightWidthLimit = juncData[1] + walkwayWidth / 2;
 
     if (src == 0)
     {
         v.insert(v.end(), {Point3f(leftWidthLimit - 1, -walkwayWidth / 3, 0.0),
-                           Point3f(rightWidthLimit + 1, -walkwayWidth / 3, 0.0)});
-        v.insert(v.end(), {Point3f(rightWidthLimit + 2, -walkwayWidth / 3, 0.0)});
+                           Point3f(rightWidthLimit + 1, -walkwayWidth / 3, 0.0)});    //rẽ trái, khoảng cách limit trái -1, phải +1
+        v.insert(v.end(), {Point3f(rightWidthLimit + 2, -walkwayWidth / 3, 0.0)});    //phải +2
         return v;
     }
     else
@@ -267,9 +267,9 @@ std::vector<Point3f> Utility::getRouteAGVHallway(int src, float walkwayWidth,
 
 // src = {0, 1, 2} ~ Go from Left, Bottom, Right side
 // turningDirection = {0, 1, 2} - Turn Left, Go Straight, Turn Right
-std::vector<Point3f> Utility::getRouteAGVTJunction(
+std::vector<Point3f> Utility::getRouteAGVTJunction(    
     int src, int turningDirection, float walkwayWidth,
-    std::vector<float> juncData)
+    std::vector<float> juncData)                        //ngã 3
 {
     std::vector<Point3f> v;
 
