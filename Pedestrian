@@ -56,11 +56,12 @@ public:
 
 
 /************************** Định nghĩa Personality **********************/
-class Personaliity {
+class Personality {
 private:
 	double lambda;
 	double positiveEmotionThreshold;
 	double negativeEmotionThreshold;
+	
 public:
 	//constructor
 	Personality(double lambda, double positiveEmotionThreshold, double negativeEmotionThreshold)
@@ -68,19 +69,19 @@ public:
 
 	//thêm method sau nếu cần
 
-}
+};
 
 class Open : public Personality {
 public:
 	Open() : Personality(1.0, 0.3, -0.7) {}
 	//thêm method nếu cần
-}
+};
 
-class Neurotic : public Personality() {
+class Neurotic : public Personality {
 public:
 	Neurotic() : Personality(4.0, 0.6, -0.4) {}
 	//thêm method nếu cần
-}
+};
 
 
 /******************************* Định nghĩa Emotion **************************/
@@ -114,7 +115,7 @@ double getHate() const {
 double getSad() const {
         return sad;
     }
-}
+};
 /* dùng như này
 int main() {
 	Emotion emotion;
@@ -133,7 +134,7 @@ private:
 public:
 	AGVEvent(std::vector<std::vector<double>> intensity, float time) : intensity(intensity), time(time) {}
 
-}
+};
 /****************************** CÁC CLASS PEDESTRIAN **************************/
 class Pedestrian {
 	private:
@@ -149,7 +150,7 @@ class Pedestrian {
 		double age;
 		AGVEvent impactOfAGV;
 		Point tempPoints;
-		
+	
 };
 
 class Patient : public Pedestrian {
