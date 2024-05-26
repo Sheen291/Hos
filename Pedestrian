@@ -125,8 +125,14 @@ int main() {
 
 /****************************** Định nghĩa AGVEvent ***************************/
 class AGVEvent {
+private:
+	std::vector<std::vector<double>>  intensity;	//vector lưu 6 cái vector chứa n cái emotionvalue tạo từ python
+	float time;		//time được tính từ hàm python câu 2j theo phân phối chuẩn
 
+public:
+	AGVEvent(std::vector<std::vector<double>> intensity, float time) : intensity(intensity), time(time) {}
 
+}
 /****************************** CÁC CLASS PEDESTRIAN **************************/
 class Pedestrian {
 	private:
