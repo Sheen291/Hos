@@ -1,6 +1,7 @@
 
 /****************************************************************************************************/
 //mapData kiểu dữ liệu là map[string][vector<float>]
+//hallwayWidth khác walkwayWidth
 
 if ((int)inputData["runMode"]["value"] == 0)
     {
