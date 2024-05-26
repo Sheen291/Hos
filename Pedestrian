@@ -1,0 +1,94 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+// Định nghĩa Point
+struct Point {
+    
+	double x, y;
+    // Constructor để khởi tạo Point
+   	Point() : x(0), y(0) {}
+   	Point(double x, double y) : x(x), y(y) {}
+
+   	// Method to print Point
+   	void print() const {
+   	    cout << "(" << x << ", " << y << ")";
+   	}
+};
+
+class Ward {
+public:
+    string nameWard;
+    Point start;
+    Point end;
+    vector<Point> wall;
+
+    // Constructor
+    Ward(string nameWard, Point start, Point end, vector<Point> wall)
+        : nameWard(nameWard), start(start), end(end), wall(wall) {}
+
+    // Method to add a wall coordinate
+    void addWall(Point p) {
+        wall.push_back(p);
+    }
+
+    // Print function for debugging
+    void printWard() const {
+        cout << "Ten Khoa: " << nameWard << endl;
+        cout << "Toa do bat dau: "; start.print(); cout << endl;
+        cout << "Toa do ket thuc: "; end.print(); cout << endl;
+        cout << "Toa do tuong: ";
+        for (const auto& w : wall) {
+            w.print(); cout << " ";
+        }
+        cout << endl;
+    }
+};
+
+//CÁC CLASS PEDESTRIAN
+class Pedestrian {
+	protected:
+		
+		
+};
+
+class Patient : public Pedestrian {
+	public:
+		enum Walkability
+		{
+			crutches,
+			sticks,
+			wheelchairs,
+			blind
+		};
+		
+};
+
+class Visitor : public Pedestrian {
+	public:
+		enum Walkability
+		{
+			noDisabilityNoOvertaking,
+			noDisabilityOvertaking
+		};
+};
+
+class Personel : public Pedestrian {
+	
+};
+
+
+int main() {
+    // Example usage
+    Point start(1, 2);
+    Point end(3, 4);
+    vector<Point> walls = {Point(0, 6), Point(6, 6), Point(6, 0), Point(0, 0)};
+
+    Ward ward("B", start, end, walls);
+
+    ward.printWard();
+
+    return 0;
+}
