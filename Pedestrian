@@ -4,7 +4,8 @@
 
 using namespace std;
 
-// Định nghĩa Point
+
+/***************************** Định nghĩa Point **************************/
 struct Point {
     
 	double x, y;
@@ -18,6 +19,10 @@ struct Point {
    	}
 };
 
+
+
+
+/*************************** Định nghĩa Ward *****************************/
 class Ward {
 public:
     string nameWard;
@@ -34,7 +39,7 @@ public:
         wall.push_back(p);
     }
 
-    // Print function for debugging
+    // Print function for debugging (có hoặc không cũng được)
     void printWard() const {
         cout << "Ten Khoa: " << nameWard << endl;
         cout << "Toa do bat dau: "; start.print(); cout << endl;
@@ -47,10 +52,96 @@ public:
     }
 };
 
-//CÁC CLASS PEDESTRIAN
+
+
+/************************** Định nghĩa Personality **********************/
+class Personaliity {
+private:
+	double lambda;
+	double positiveEmotionThreshold;
+	double negativeEmotionThreshold;
+public:
+	//constructor
+	Personality(double lambda, double positiveEmotionThreshold, double negativeEmotionThreshold)
+	: lambda(lambda), positiveEmotionThreshold(positiveEmotionThreshold), negativeEmotionThreshold(negativeEmotionThreshold) {}
+
+	//thêm method sau nếu cần
+
+}
+
+class Open : public Personality {
+public:
+	Open() : Personality(1.0, 0.3, -0.7) {}
+	//thêm method nếu cần
+}
+
+class Neurotic : public Personality() {
+public:
+	Neurotic() : Personality(4.0, 0.6, -0.4) {}
+	//thêm method nếu cần
+}
+
+
+/******************************* Định nghĩa Emotion **************************/
+class Emotion {
+private:
+	double pleasure;
+	double surprise;
+	double anger;
+	double fear;
+	double hate;
+	double sad;
+public:
+	Emotion() : pleasure(0.75), surprise(0.5), 
+		    anger(-0.2), fear(-0.2),
+		    hate(0.4), sad(-0.4) {}
+double getPleasure() const {
+        return pleasure;
+    }
+double getSurprise() const {
+        return surprise;
+    }
+double getAnger() const {
+        return anger;
+    }
+double getFear() const {
+        return fear;
+    }
+double getHate() const {
+        return hate;
+    }
+double getSad() const {
+        return sad;
+    }
+}
+/* dùng như này
+int main() {
+	Emotion emotion;
+	double pleasureValue = emotion.getPleasure;
+	cout<<pleasureValue<<endl;
+}
+*/
+
+
+/****************************** Định nghĩa AGVEvent ***************************/
+class AGVEvent {
+
+
+/****************************** CÁC CLASS PEDESTRIAN **************************/
 class Pedestrian {
-	protected:
-		
+	private:
+		int ID;
+		Ward start;
+		Ward end;
+		vector<Ward> journey;
+		double velocity;
+		Personality personality;
+		Emotion emotion;
+		double walkingTime;
+		double distance;
+		double age;
+		AGVEvent impactOfAGV;
+		Point tempPoints;
 		
 };
 
@@ -63,12 +154,15 @@ class Patient : public Pedestrian {
 			wheelchairs,
 			blind
 		};
+		/*muốn switch case để thêm dữ liệu thì Patient::Walkability a;
+		switch(a) {  (a chạy từ 0 đến 3)
+		*/
 		
 };
 
 class Visitor : public Pedestrian {
 	public:
-		enum Walkability
+		enum Walkability	//tương tự Patient
 		{
 			noDisabilityNoOvertaking,
 			noDisabilityOvertaking
