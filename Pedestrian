@@ -162,6 +162,21 @@ class Pedestrian {
 		Pedestrian() : ID(0.0), start(Ward()), end(Ward()), journey(vector<Ward>()),
 				velocity(0.0), personality(Personality()), emotion(Emotion()),
 				walkingTime(0.0), distance(0.0), age(0.0), impactOfAGV(AGVEvent()), tempPoints(Point()) {}
+				
+		    void setID(int id) { ID = id; }
+    		void setStart(Ward s) { start = s; }
+    		void setEnd(Ward e) { end = e; }
+    		void setJourney(vector<Ward> j) { journey = j; }
+    		void setVelocity(double v) { velocity = v; }
+    		void setPersonality(Personality p) { personality = p; }
+    		void setEmotion(Emotion e) { emotion = e; }
+    		void setWalkingTime(double wt) { walkingTime = wt; }
+    		void setDistance(double d) { distance = d; }
+    		void setAge(double a) { age = a; }
+    		void setImpactOfAGV(AGVEvent agv) { impactOfAGV = agv; }
+    		void setTempPoints(Point tp) { tempPoints = tp; }
+
+
 };
 
 class Patient : public Pedestrian {
@@ -315,10 +330,27 @@ int main() {
     }
 	for (const auto& patient : patients) {
         patient.printPatient();
-        cout << endl;
+        cout << endl<<endl<<endl;
+    }
+    int M = 50; //(tổng người)
+    vector<Pedestrian*> pedestrians;
+    for (int i = 0; i < M; ++i)
+    {
+	    //Tạm bợ
+	    if (i % 3 == 0) {
+            pedestrians.push_back(new Patient());
+        } else if (i % 3 == 1) {
+            pedestrians.push_back(new Visitor());
+        } else {
+            pedestrians.push_back(new Personel());
+        }
     }
 	
-	
+	for (int i = 0; i < M; ++i)
+	{
+	    pedestrians[i]->setID(i+1);
+	}
     return 0;
+    
 	
 }
