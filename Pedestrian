@@ -145,7 +145,7 @@ public:
 };
 /****************************** CÁC CLASS PEDESTRIAN **************************/
 class Pedestrian {
-	private:
+	protected:
 		int ID;
 		Ward start;
 		Ward end;
@@ -159,7 +159,7 @@ class Pedestrian {
 		AGVEvent impactOfAGV;
 		Point tempPoints;
 	public:
-		Pedestrian() : ID(0), start(Ward()), end(Ward()), journey(vector<Ward>()),
+		Pedestrian() : ID(0.0), start(Ward()), end(Ward()), journey(vector<Ward>()),
 				velocity(0.0), personality(Personality()), emotion(Emotion()),
 				walkingTime(0.0), distance(0.0), age(0.0), impactOfAGV(AGVEvent()), tempPoints(Point()) {}
 };
@@ -182,7 +182,7 @@ class Patient : public Pedestrian {
 
 		Patient() : Pedestrian(), walkability(crutches) {}
 
-		void setID(int id) { ID = id; }
+			void setID(int id) { ID = id; }
     		void setStart(Ward s) { start = s; }
     		void setEnd(Ward e) { end = e; }
     		void setJourney(vector<Ward> j) { journey = j; }
@@ -214,8 +214,9 @@ class Visitor : public Pedestrian {
 		};
 
 		Walkability walkability;
-		Visitor() : Pedestrian(), walkability(noDisabilityNoOvertalking) {}
-
+		
+		Visitor() : Pedestrian(), walkability(noDisabilityNoOvertaking) {}
+		
 		void setID(int id) { ID = id; }
 		void setStart(Ward s) { start = s; }
 		void setEnd(Ward e) { end = e; }
@@ -255,7 +256,6 @@ class Personel : public Pedestrian {
 
 		void printPersonel() const {
         		cout << "Personel ID: " << ID << endl;
-        		cout << "Walkability: " << walkability << endl;
         		start.printWard();
         		end.printWard();
 		    }
@@ -264,7 +264,7 @@ class Personel : public Pedestrian {
 
 int main() {
     // Example usage
-    Point start(1, 2);
+    /*Point start(1, 2);
     Point end(3, 4);
     vector<Point> walls = {Point(0, 6), Point(6, 6), Point(6, 0), Point(0, 0)};
 
@@ -273,8 +273,8 @@ int main() {
     ward.printWard();
 
     cout << endl;
-
-    /*
+*/
+    
 	Point p1(0, 8), p2(0, 12);
 	vector<Point> walls = {Point(0, 0), Point(20, 0), Point(20, 20), Point(0, 20)};
 	Ward ward1("A", p1, p2, walls);
@@ -289,7 +289,7 @@ int main() {
 	int numOfPatients = 3;
 	vector<Patient> patients(numOfPatients);
 
-	for (int i = 0; i < numberOfPatients; ++i) {
+	for (int i = 0; i < numOfPatients; ++i) {
         // Calculate attributes for each Patient
         int patientID = i + 1;
         double velocity = 1.5 + i * 0.1; // Example variation in velocity
@@ -317,7 +317,7 @@ int main() {
         patient.printPatient();
         cout << endl;
     }
-	*/
+	
 	
     return 0;
 	
