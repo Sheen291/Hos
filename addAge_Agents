@@ -1,0 +1,61 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<double> ageOfAgent(int n)
+{
+  int numOfAgents = n;
+	int max_value = 104;
+	int min_value = 5;
+	int k = 100;
+	
+ 	float mean = (min_value + max_value) / 2;	//Trung bình mẫu
+ 	float std = (max_value - min_value) / 6;	//Độ lệch chuẩn của phân phối chuẩn
+ 	
+ 	std::random_device rd;
+ 	std::mt19937 gen(rd());
+ 	std::normal_distribution<double> distribution(mean, std);
+ 	
+ 	std::vector<double> samples;
+ 	//int count = 0;
+ 	while (samples.size() < numOfAgents)	//tạo mẫu dữ liệu theo phân bố chuẩn
+ 	{
+ 		double random_number = distribution(gen);
+ 		if (random_number >= min_value && random_number <= max_value)
+		{
+			double rounded_number = std::round(random_number * 10.0f) / 10.0f;
+			samples.push_back(rounded_number);
+			//count++;
+		}
+	}
+	
+	//tính toán giá trị thống kê và p_value
+	double sum = 0.0;
+	for (int i = 0; i<samples.size(); i++)
+		sum += samples[i];
+	double mean_samples = sum/samples.size();//trung bình mẫu
+	
+	double sum_squared = 0;		//tổng bình phương
+	for (int i=0;i<samples.size();i++)
+		sum_squared += (samples[i] - mean_samples) * (samples[i] - mean_samples);
+	
+	double std_dev = std::sqrt(sum_squared / numOfAgents);//độ lệch chuẩn của mẫu
+	
+	double alpha = 0.05;//mức ý nghĩa
+	
+	double p_value = 0.5 * (1 + std::erf((104 - mean_samples) / (std_dev * std::sqrt(2)))) 
+					- 0.5 * (1 + std::erf((5 - mean_samples) / (std_dev * std::sqrt(2))));
+	if (p_value < alpha){
+	cout<<"Mẫu dữ liệu không tuân theo phân phối chuẩn"<<endl;
+	}
+	else
+	{
+		return samples;
+		//cout<<"So nguoi co do tuoi tu 5 den 104"<<count;		// Tạo đến khi p_value > alpha thì do while vào
+	}
+  return 0;
+}
+int main()
+{
+  //trả về vector<double> chứa tuổi; sau đó áp từng phần tử vào mảng Pedes
+//thêm điều kiện cho tuổi sau
+}
