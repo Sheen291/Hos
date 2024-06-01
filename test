@@ -1,0 +1,78 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <bits/stdc++.h>
+using namespace std;
+
+
+/***************************** Định nghĩa Point **************************/
+struct Point {
+    
+	double x, y;
+    // Constructor để khởi tạo Point
+   	Point() : x(0), y(0) {}
+   	Point(double x, double y) : x(x), y(y) {}
+    Point(double xy) : x(xy), y(xy) {}
+   	// Method to print Point
+   	void print() const {
+   	    cout << "(" << x << ", " << y << ")";
+   	}
+};
+
+
+
+
+/*************************** Định nghĩa Ward *****************************/
+class Ward {
+public:
+    string nameWard;
+    Point start, end;
+    vector<Point> wall;
+
+    // Constructor
+	Ward() : nameWard(""), start(Point()), end(Point()), wall(vector<Point>()) {}
+	
+	Ward(string nameWard, Point start, Point end, vector<Point> wall)
+        : nameWard(nameWard), start(start), end(end), wall(wall) {}
+
+    // Method to add a wall coordinate
+    void setStart(Point a) {
+        start.x = a.x;
+        start.y = a.y;
+    }
+    void setEnd(Point a) {
+        end.x = a.x;
+        end.y = a.y;
+    }
+    
+    void addWall(Point p) {
+        wall.push_back(p);
+    }
+
+    // Print function for debugging (có hoặc không cũng được)
+    void printWard() const {
+        cout << "Ten Khoa: " << nameWard << endl;
+        cout << "Toa do bat dau: "; start.print(); cout << endl;
+        cout << "Toa do ket thuc: "; end.print(); cout << endl;
+        cout << "Toa do tuong: ";
+        for (const auto& w : wall) {
+            w.print(); cout << " ";
+        }
+        cout << endl;
+    }
+};
+
+int main()
+{   
+    int N = 2;
+    vector<Ward> wards(N);
+    map<string, vector<double>> Mymap;
+    Mymap["A"] = {1.0, 2.0};
+    
+    for(int i = 0; i < N; i++)
+    {
+        wards[i].setStart(Point(Mymap["A"][i]));
+        
+    }
+    
+}
