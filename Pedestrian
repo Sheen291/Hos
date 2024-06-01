@@ -16,6 +16,7 @@ struct Point {
     // Constructor để khởi tạo Point
    	Point() : x(0), y(0) {}
    	Point(double x, double y) : x(x), y(y) {}
+	Point(double xy) : x(xy), y(xy) {}
 
    	// Method to print Point
    	void print() const {
@@ -39,6 +40,14 @@ public:
 	Ward(string nameWard, Point start, Point end, vector<Point> wall)
         : nameWard(nameWard), start(start), end(end), wall(wall) {}
 
+	void setStart(Point a) {
+        start.x = a.x;
+        start.y = a.y;
+    }
+   	void setEnd(Point a) {
+        end.x = a.x;
+        end.y = a.y;
+    }
     // Method to add a wall coordinate
     void addWall(Point p) {
         wall.push_back(p);
@@ -56,6 +65,22 @@ public:
         cout << endl;
     }
 };
+/*
+int main()
+{   
+    int N = 2;
+    vector<Ward> wards(N);
+    map<string, vector<double>> Mymap;
+    Mymap["A"] = {1.0, 2.0};
+    
+    for(int i = 0; i < N; i++)
+    {
+        wards[i].setStart(Point(Mymap["A"][i]));
+        
+    }
+    
+}
+*/
 
 
 
