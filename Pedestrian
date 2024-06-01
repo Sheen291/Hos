@@ -164,36 +164,26 @@ class Event{
 
 		Event(const vector<vector<double>>& intensity, const vector<float>& allTimeDistances)
 		: intensity(intensity), allTimeDistances(allTimeDistances) {}
-}
 
-
-class AGVEvent : public Event {
-public:
-	AGVEvent() : Event() {}
-	
-	AGVEvent(const vector<vector<double>>& intensity, const vector<float>& allTimeDistances)
-        : Event(intensity, allTimeDistances) {}
-
-	void printAGVEvent() const {
-        cout << "Intensity: " << endl;
-        for (const auto& vec : intensity) {
-            for (const auto& val : vec) {
-                cout << val << " ";
-            }
-            cout << endl;
-        }
-        cout << "All Time Distances: " << endl;
-        for (const auto& time : allTimeDistances) {
-            cout << time << " ";
-        }
-        cout << endl;
-    }
-
+		void printEvent() const {
+        	cout << "Intensity: " << endl;
+        	for (const auto& vec : intensity) {
+        	    for (const auto& val : vec) {
+        	        cout << val << " ";
+        	    }
+        	    cout << endl;
+        	}
+        	cout << "All Time Distances: " << endl;
+        	for (const auto& time : allTimeDistances) {
+        	    cout << time << " ";
+        	}
+        	cout << endl;
+    		}
 };
 
 /*
 int main() {
-    // Khởi tạo một đối tượng AGVEvent với các giá trị mẫu
+    // Khởi tạo một đối tượng Event với các giá trị mẫu
     vector<vector<double>> sampleIntensity = {
         {0., -0.3, 0.5, 0.4, -0.2},
         {0.1, -0.1, 0.1, 0.1, -0.6},
@@ -205,12 +195,33 @@ int main() {
     };
     vector<float> sampleAllTimeDistances = {0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f};
 
-    AGVEvent agvEvent(sampleIntensity, sampleAllTimeDistances);
-    agvEvent.printAGVEvent();
+    Event events(sampleIntensity, sampleAllTimeDistances);
+    events.printEvent();
 
     return 0;
 }
 */
+
+/*
+int main()
+{
+vector<vector<double>> allEvent(43, vector<double>(6, 0.0));	//43 events, mỗi event có 6 mảng ảnh hưởng
+vector<float> allTimeDistances(43, 0.0f);	//43 khoảng thời gian
+
+for (int i = 0; i < 43; ++i)
+{
+	for (int j = 0; j < 6; ++j) {
+	
+	}
+}
+}
+*/
+
+/********************************** AGVEvent (chưa có thông tin) *********************/
+class AGVEvent {
+public:
+	
+};
 
 
 /****************************** CÁC CLASS PEDESTRIAN **************************/
@@ -234,13 +245,14 @@ class Pedestrian {
 				velocity(0.0), personality(Personality()), emotion(Emotion()),
 				walkingTime(0.0), distance(0.0), age(0.0), impactOfAGV(AGVEvent()), tempPoints(Point()) {}
 				
-		    void setID(int id) { ID = id; }
+		void setID(int id) { ID = id; }
     		void setStart(Ward s) { start = s; }
     		void setEnd(Ward e) { end = e; }
     		void setJourney(vector<Ward> j) { journey = j; }
     		void setVelocity(double v) { velocity = v; }
     		void setPersonality(Personality p) { personality = p; }
     		void setEmotion(Emotion e) { emotion = e; }
+		void setEvents(vector<Event> ev) { events = e; }
     		void setWalkingTime(double wt) { walkingTime = wt; }
     		void setDistance(double d) { distance = d; }
     		void setAge(double a) { age = a; }
@@ -334,7 +346,6 @@ int main() {
 	Emotion emotion;
 
 	vector<vector<double>> intensity = {{0.1, 0.2, 0.3}, {0.4, 0.5, 0.6}};
-	AGVEvent agvEvent(intensity, 5.0);
 
 	int numOfPatients = 3;
 	vector<Patient> patients(numOfPatients);
@@ -359,7 +370,6 @@ int main() {
         patients[i].setWalkingTime(walkingTime);
         patients[i].setDistance(distance);
         patients[i].setAge(age);
-        patients[i].setImpactOfAGV(agvEvent);
         patients[i].setTempPoints(p1);
         patients[i].setWalkability(walkability);
     }
