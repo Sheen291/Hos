@@ -154,20 +154,65 @@ int main() {
 	cout<<pleasureValue<<endl;
 }
 */
+/************************************* EVENT **********************************/
+class Event{
+	public:
+		vector<vector<double>> intensity;	//python 2i trả về mảng 6 phần tử mảng chứa (43 events) loại ảnh hướng cảm xúc
+		vector<float> allTimeDistances;		//lưu lại thời gian cách nhau giữa 43 event vừa tạo
+			//đang mặc định 43 events
+		Event() : intensity(6, vector<double>(43, 0)), allTimeDistances(43, 0.0f>()) {}
+
+		Event(const vector<vector<double>>& intensity, const vector<float>& allTimeDistances)
+		: intensity(intensity), allTimeDistances(allTimeDistances) {}
+}
 
 
-/****************************** Định nghĩa AGVEvent ***************************/
-class AGVEvent {
-private:
-	std::vector<std::vector<double>>  intensity;	//vector lưu 6 cái vector chứa n cái emotionvalue tạo từ python
-	float times;		//times được tính từ hàm python câu 2j theo phân phối chuẩn
-
+class AGVEvent : public Event {
 public:
-	AGVEvent() : intensity(vector<vector<double>>()), times(0.0f) {}
+	AGVEvent() : Event() {}
 	
-	AGVEvent(std::vector<std::vector<double>> intensity, float times) : intensity(intensity), times(times) {}
+	AGVEvent(const vector<vector<double>>& intensity, const vector<float>& allTimeDistances)
+        : Event(intensity, allTimeDistances) {}
+
+	void printAGVEvent() const {
+        cout << "Intensity: " << endl;
+        for (const auto& vec : intensity) {
+            for (const auto& val : vec) {
+                cout << val << " ";
+            }
+            cout << endl;
+        }
+        cout << "All Time Distances: " << endl;
+        for (const auto& time : allTimeDistances) {
+            cout << time << " ";
+        }
+        cout << endl;
+    }
 
 };
+
+/*
+int main() {
+    // Khởi tạo một đối tượng AGVEvent với các giá trị mẫu
+    vector<vector<double>> sampleIntensity = {
+        {0., -0.3, 0.5, 0.4, -0.2},
+        {0.1, -0.1, 0.1, 0.1, -0.6},
+        {0.2, -0.2, 0.2, 0.5, -0.2},
+	{0.3, -0.7, 0.9, 0.3, -0.2},
+        {0.5, -0.3, 0.5, 0.6, -0.4},
+        {0.1, -0.5, 0.1, 0.5, -0.7},
+        // Thêm các mảng khác nếu cần thiết
+    };
+    vector<float> sampleAllTimeDistances = {0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f};
+
+    AGVEvent agvEvent(sampleIntensity, sampleAllTimeDistances);
+    agvEvent.printAGVEvent();
+
+    return 0;
+}
+*/
+
+
 /****************************** CÁC CLASS PEDESTRIAN **************************/
 class Pedestrian {
 	protected:
@@ -178,6 +223,7 @@ class Pedestrian {
 		double velocity;
 		Personality personality;
 		Emotion emotion;
+		vector<Event> events;
 		double walkingTime;
 		double distance;
 		double age;
