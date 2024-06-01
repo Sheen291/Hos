@@ -222,18 +222,6 @@ class Patient : public Pedestrian {
 
 		Patient() : Pedestrian(), walkability(crutches) {}
 
-			void setID(int id) { ID = id; }
-    		void setStart(Ward s) { start = s; }
-    		void setEnd(Ward e) { end = e; }
-    		void setJourney(vector<Ward> j) { journey = j; }
-    		void setVelocity(double v) { velocity = v; }
-    		void setPersonality(Personality p) { personality = p; }
-    		void setEmotion(Emotion e) { emotion = e; }
-    		void setWalkingTime(double wt) { walkingTime = wt; }
-    		void setDistance(double d) { distance = d; }
-    		void setAge(double a) { age = a; }
-    		void setImpactOfAGV(AGVEvent agv) { impactOfAGV = agv; }
-    		void setTempPoints(Point tp) { tempPoints = tp; }
     		void setWalkability(Walkability w) { walkability = w; }
 
     		void printPatient() const {
@@ -257,18 +245,6 @@ class Visitor : public Pedestrian {
 		
 		Visitor() : Pedestrian(), walkability(noDisabilityNoOvertaking) {}
 		
-		void setID(int id) { ID = id; }
-		void setStart(Ward s) { start = s; }
-		void setEnd(Ward e) { end = e; }
-		void setJourney(vector<Ward> j) { journey = j; }
-		void setVelocity(double v) { velocity = v; }
-		void setPersonality(Personality p) { personality = p; }
-		void setEmotion(Emotion e) { emotion = e; }
-		void setWalkingTime(double wt) { walkingTime = wt; }
-		void setDistance(double d) { distance = d; }
-		void setAge(double a) { age = a; }
-    		void setImpactOfAGV(AGVEvent agv) { impactOfAGV = agv; }
-    		void setTempPoints(Point tp) { tempPoints = tp; }
     		void setWalkability(Walkability w) { walkability = w; }
 
 		void printVisitor() const {
@@ -281,18 +257,6 @@ class Visitor : public Pedestrian {
 
 class Personel : public Pedestrian {
 	public:
-		void setID(int id) { ID = id; }
-    		void setStart(Ward s) { start = s; }
-    		void setEnd(Ward e) { end = e; }
-    		void setJourney(vector<Ward> j) { journey = j; }
-    		void setVelocity(double v) { velocity = v; }
-    		void setPersonality(Personality p) { personality = p; }
-    		void setEmotion(Emotion e) { emotion = e; }
-    		void setWalkingTime(double wt) { walkingTime = wt; }
-    		void setDistance(double d) { distance = d; }
-    		void setAge(double a) { age = a; }
-    		void setImpactOfAGV(AGVEvent agv) { impactOfAGV = agv; }
-    		void setTempPoints(Point tp) { tempPoints = tp; }
 
 		void printPersonel() const {
         		cout << "Personel ID: " << ID << endl;
