@@ -30,3 +30,43 @@ std::vector<std::string> Utility::EmotionOfPedes(json inputData)
 //sau cần thêm vài điều kiện ở câu 3
 //Hiện tại vẫn chưa biết các thông số bên trong 2 tính cách có 
 //cần đi kèm theo tên tính cách hay không, nên là để đó sau chữa tiếp
+/*#include <bits/stdc++.h>
+using namespace std;
+vector<string> EmotionOfPedes()
+{
+  vector<string> Emo;
+
+  float numOfAgents = 50;
+  float perOpen = 50;
+  float perNeurotic = 100 - perOpen;
+  double check = 1.0;
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_real_distribution<> dis(0,1);
+  
+  while (check >= 0.05)    //tạo mẫu đến khi thỏa mãn sai số dưới 5%
+  {
+      Emo.clear();
+      int count_open = 0;
+      int count_neurotic = 0;
+      for (int i = 0; i < numOfAgents; i++)      //tạo M phần tử chuỗi tính cách cho M đối tượng
+      {
+        double random_value = dis(gen);
+        if (random_value < 0.5)  {Emo.push_back("open");  ++count_open;}
+        else {Emo.push_back("neurotic");  ++count_neurotic;}
+      }
+        cout<<count_open<<" "<<count_neurotic<<endl;    
+      check = std::abs(count_open - count_neurotic) / numOfAgents;
+  }
+  
+
+  return Emo;
+}
+
+int main() {
+
+    vector<string> a = EmotionOfPedes();
+    for (const auto& i : a)
+    cout << i<<" ";
+    
+}*/
