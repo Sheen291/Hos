@@ -282,22 +282,20 @@ class Pedestrian {
 
 
 };
-
-class Patient : public Pedestrian {
-	public:
-		enum Walkability
+enum Walkability
 		{
 			crutches,
 			sticks,
 			wheelchairs,
-			blind
+			blind,
+			noDisabilityNoOvertaking,
+			noDisabilityOvertaking
 		};
 
-		Walkability walkability;
+class Patient : public Pedestrian {
+	public:
 
-		/*muốn switch case để thêm dữ liệu thì Patient::Walkability a;
-		switch(a) {  (a chạy từ 0 đến 3)
-		*/
+		Walkability walkability;
 
 		Patient() : Pedestrian(), walkability(crutches) {}
 
@@ -314,11 +312,6 @@ class Patient : public Pedestrian {
 
 class Visitor : public Pedestrian {
 	public:
-		enum Walkability	//tương tự Patient
-		{
-			noDisabilityNoOvertaking,
-			noDisabilityOvertaking
-		};
 
 		Walkability walkability;
 		
