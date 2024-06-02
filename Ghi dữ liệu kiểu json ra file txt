@@ -1,0 +1,425 @@
+
+/***************************TRƯỚC MẮT CỨ CHUNG CHUNG THẾ NÀY ĐÃ, SAU ĐÓ ĐỌC CHIA TỪNG FILE SAU**************************/
+
+//#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <string>
+
+//#include "json.hpp"
+//using json = nlohmann::json;
+
+using namespace std;
+
+
+/***************************** Định nghĩa Point **************************/
+struct Point {
+    
+	double x, y;
+    // Constructor để khởi tạo Point
+   	Point() : x(0), y(0) {}
+   	Point(double x, double y) : x(x), y(y) {}
+	Point(double xy) : x(xy), y(xy) {}
+
+   	// Method to print Point
+   	void print() const {
+   	    cout << "(" << x << ", " << y << ")";
+   	}
+
+    json to_json() const {
+      return {{"x", x}, {"y", y}};
+  }
+};
+
+
+
+
+/*************************** Định nghĩa Ward *****************************/
+class Ward {
+public:
+    string nameWard;
+    Point start, end;
+    vector<Point> wall;
+
+    // Constructor
+	Ward() : nameWard(""), start(Point()), end(Point()), wall(vector<Point>()) {}
+	
+	Ward(string nameWard, Point start, Point end, vector<Point> wall)
+        : nameWard(nameWard), start(start), end(end), wall(wall) {}
+
+	void setStart(Point a) {
+        start.x = a.x;
+        start.y = a.y;
+    }
+   	void setEnd(Point a) {
+        end.x = a.x;
+        end.y = a.y;
+    }
+    // Method to add a wall coordinate
+    void addWall(Point p) {
+        wall.push_back(p);
+    }
+
+    // Print function for debugging (có hoặc không cũng được)
+    void printWard() const {
+        cout << "Ten Khoa: " << nameWard << endl;
+        cout << "Toa do bat dau: "; start.print(); cout << endl;
+        cout << "Toa do ket thuc: "; end.print(); cout << endl;
+        cout << "Toa do tuong: ";
+        for (const auto& w : wall) {
+            w.print(); cout << " ";
+        }
+        cout << endl;
+    }
+
+    json to_json() const{
+      return {{"nameWard", nameWard}, {"Start", start}, {"End", end}, {"Wall", wall}};
+    }
+};
+
+
+/************************** Định nghĩa Personality **********************/
+class Personality {
+protected:
+	double lambda;
+	double positiveEmotionThreshold;
+	double negativeEmotionThreshold;
+	
+public:
+	//constructor
+	Personality() : lambda(0.0), positiveEmotionThreshold(0.0), negativeEmotionThreshold(0.0) {}
+	
+	Personality(double lambda, double positiveEmotionThreshold, double negativeEmotionThreshold)
+	: lambda(lambda), positiveEmotionThreshold(positiveEmotionThreshold), negativeEmotionThreshold(negativeEmotionThreshold) {}
+
+	//thêm method sau nếu cần
+
+  virtual json to_json() const {
+        return {
+            {"lambda", lambda},
+            {"positiveEmotionThreshold", positiveEmotionThreshold},
+            {"negativeEmotionThreshold", negativeEmotionThreshold}
+        };
+    }
+  
+};
+
+class Open : public Personality {
+public:
+	Open() : Personality(1.0, 0.3, -0.7) {}
+	//thêm method nếu cần
+
+  json to_json() const override {
+        json j = Personality::to_json();
+        j["type"] = "Open";  //thêm trường type để biết là kiểu gì trong file text
+        return j;
+    }
+
+};
+
+class Neurotic : public Personality {
+public:
+	Neurotic() : Personality(4.0, 0.6, -0.4) {}
+	//thêm method nếu cần
+  
+  json to_json() const override {
+        json j = Personality::to_json();
+        j["type"] = "Neurotic";
+        return j;
+    }
+
+};
+
+
+/******************************* Định nghĩa Emotion **************************/
+class Emotion {
+private:
+	double pleasure;
+	double surprise;
+	double anger;
+	double fear;
+	double hate;
+	double sad;
+public:
+  //constructor mặc định
+	Emotion() : pleasure(0.75), surprise(0.5), 
+		    anger(-0.2), fear(-0.2),
+		    hate(0.4), sad(-0.4) {}
+
+  double getPleasure() const { return pleasure; }
+  double getSurprise() const { return surprise; }
+  double getAnger() const { return anger; }
+  double getFear() const { return fear; }
+  double getHate() const { return hate; }
+  double getSad() const { return sad; }
+
+  json to_json() const {
+        return {
+            {"pleasure", pleasure},
+            {"surprise", surprise},
+            {"anger", anger},
+            {"fear", fear},
+            {"hate", hate},
+            {"sad", sad}
+        };
+    }
+
+};
+//bên kia có ghi cách dùng còn bên này thì xóa cho đỡ rối
+/************************************* EVENT **********************************/
+class Event{
+	public:
+		vector<vector<double>> intensity;	//python 2i trả về mảng 6 phần tử mảng chứa (43 events) loại ảnh hướng cảm xúc
+		vector<float> allTimeDistances;		//lưu lại thời gian cách nhau giữa 43 event vừa tạo
+			//đang mặc định 43 events
+		Event() : intensity(6, vector<double>(43, 0)), allTimeDistances(43, 0.0f) {}
+
+		Event(const vector<vector<double>>& intensity, const vector<float>& allTimeDistances)
+		: intensity(intensity), allTimeDistances(allTimeDistances) {}
+
+		void printEvent() const {
+        	cout << "Intensity: " << endl;
+        	for (const auto& vec : intensity) {
+        	    for (const auto& val : vec) {
+        	        cout << val << " ";
+        	    }
+        	    cout << endl;
+        	}
+        	cout << "All Time Distances: " << endl;
+        	for (const auto& time : allTimeDistances) {
+        	    cout << time << " ";
+        	}
+        	cout << endl;
+    		}
+
+    virtual json to_json() const {
+        return {
+            {"intensity", intensity},
+            {"allTimeDistances", allTimeDistances}
+        };
+    }
+
+};
+
+
+
+/********************************** AGVEvent *********************/
+class AGVEvent : public Event {
+public:
+	      //chưa có thông tin gì
+      json to_json() const override { json j = Event::to_json(); return j; }
+};
+
+
+/****************************** CÁC CLASS PEDESTRIAN **************************/
+class Pedestrian {
+	protected:
+		int ID;
+		Ward start;
+		Ward end;
+		vector<Ward> journey;
+		double velocity;
+		Personality personality;
+		Emotion emotion;
+		vector<Event> events;
+		double walkingTime;
+		double distance;
+		double age;
+		AGVEvent impactOfAGV;
+		Point tempPoints;
+	public:
+		Pedestrian() : ID(0.0), start(Ward()), end(Ward()), journey(vector<Ward>()),
+				velocity(0.0), personality(Personality()), emotion(Emotion()),
+				walkingTime(0.0), distance(0.0), age(0.0), impactOfAGV(AGVEvent()), tempPoints(Point()) {}
+				
+		    void setID(int id) { ID = id; }
+    		void setStart(Ward s) { start = s; }
+    		void setEnd(Ward e) { end = e; }
+    		void setJourney(vector<Ward> j) { journey = j; }
+    		void setVelocity(double v) { velocity = v; }
+    		void setPersonality(Personality p) { personality = p; }
+    		void setEmotion(Emotion e) { emotion = e; }
+		    void setEvent(const Event& event) { events.push_back(event); }
+    		void setWalkingTime(double wt) { walkingTime = wt; }
+    		void setDistance(double d) { distance = d; }
+    		void setAge(double a) { age = a; }
+    		void setImpactOfAGV(AGVEvent agv) { impactOfAGV = agv; }
+    		void setTempPoints(Point tp) { tempPoints = tp; }
+
+    virtual json to_json() const {
+    json j = {
+            {"ID", ID},
+            {"Ward_start", start.to_json()},
+            {"Ward_end", end.to_json()},
+            {"Velocity", velocity},
+            {"Personality", personality.to_json},  //kiểm tra xem personality có phải nullptr không, nếu có thì sẽ trả về {}
+            {"Emotion", emotion.to_json()},
+            {"Walking_Time", walkingTime},
+            {"Distance", distance},
+            {"Age", age},
+            {"Impact_of_AGV", impactOfAGV.to_json()},
+            {"TempPoints", tempPoints.to_json()}
+        };
+    json events_json;
+    for (const auto& event : events) {
+        events_json.push_back(event.to_json());
+    }
+    j["Events"] = events_json;
+
+    json journey_json;
+    for (const auto& w : journey) {
+        journey_json.push_back(w.to_json());
+    }
+    j["Journey"] = journey_json;
+
+    return j;
+    }
+
+};
+enum Walkability
+		{
+			crutches,
+			sticks,
+			wheelchairs,
+			blind,
+			noDisabilityNoOvertaking,
+			noDisabilityOvertaking
+		};
+
+class Patient : public Pedestrian {
+	public:
+
+		Walkability walkability;
+
+		Patient() : Pedestrian(), walkability(crutches) {}
+
+    		void setWalkability(Walkability w) { walkability = w; }
+
+    		void printPatient() const {
+        		cout << "Patient ID: " << ID << endl;
+        		cout << "Walkability: " << walkability << endl;
+        		start.printWard();
+        		end.printWard();
+			}
+
+      /*string walkability_Type(Walkability walkability) const {
+			switch (walkability) {
+				case crutches: 		return "crutches";
+				case sticks:		return "sticks";
+				case wheelchair:	return "wheelchair";
+				case blind:			return "blind";
+				default: return "unknown";
+			}
+		}*/
+
+    json to_json() const override {
+      //gọi ra phương thức to_json của Pedestrian
+			json j = Pedestrian::to_json();
+			//thêm trường Walkability để khi ghi dữ liệu cho file txt
+			j["walkability"] = walkability_Type(walkability);
+			return j;
+		}
+};
+
+
+class Visitor : public Pedestrian {
+	public:
+
+		Walkability walkability;
+		
+		Visitor() : Pedestrian(), walkability(noDisabilityNoOvertaking) {}
+		
+    		void setWalkability(Walkability w) { walkability = w; }
+
+		void printVisitor() const {
+			cout << "Visitor ID: " << ID << endl;
+			cout << "Walkability: " << walkability << endl;
+			start.printWard();
+			end.printWard();
+		}
+
+    /*string walkability_Type(Walkability walkability) const {
+			switch (walkability) {
+				case noDisabilityNoOvertaking: 		return "noDisabilityNoOvertaking";
+				case noDisabilityOvertaking:		return "noDisabilityOvertaking";
+				default: return "unknown";
+			}
+		}*/
+
+    json to_json() const override {
+			//gọi ra phương thức to_json của Pedestrian
+			json j = Pedestrian::to_json();
+			//thêm trường Walkability để khi ghi dữ liệu cho file txt
+			j["walkability"] = walkability_Type(walkability);
+			return j;
+		}
+
+};
+
+class Personel : public Pedestrian {
+	public:
+
+		void printPersonel() const {
+        		cout << "Personel ID: " << ID << endl;
+        		start.printWard();
+        		end.printWard();
+		    }
+
+    json to_json() const override {
+			//gọi ra phương thức to_json của Pedestrian
+			json j = Pedestrian::to_json();
+      return j;
+    }
+};
+
+
+int main() {
+    Pedestrian person;
+    person.setID(1);
+    
+    // Thiết lập các trường thông tin của đối tượng Pedestrian
+    Ward start("StartWard", Point(0, 0), Point(1, 1), {Point(0, 1), Point(1, 0)});
+    Ward end("EndWard", Point(2, 2), Point(3, 3), {Point(2, 3), Point(3, 2)});
+    person.setStart(start);
+    person.setEnd(end);
+    person.setVelocity(1.5);
+    person.setWalkingTime(10.0);
+    person.setDistance(15.0);
+    person.setAge(30.0);
+
+    // Tạo một đối tượng Personality và thiết lập các giá trị
+    Personality personality(1.0, 0.5, -0.5);
+    person.setPersonality(personality);
+
+    // Tạo một đối tượng Emotion và thiết lập các giá trị
+    Emotion emotion;
+    person.setEmotion(emotion);
+
+    // Tạo một đối tượng Event và thiết lập các giá trị
+    Event event;
+    person.setEvent(event);
+
+    // Tạo một đối tượng AGVEvent và thiết lập các giá trị
+    AGVEvent agvEvent;
+    person.setImpactOfAGV(agvEvent);
+
+    // Tạo một đối tượng Point và thiết lập các giá trị
+    Point tempPoint(4, 4);
+    person.setTempPoints(tempPoint);
+
+    // Chuyển đổi đối tượng Pedestrian thành JSON
+    json j = person.to_json();
+
+    // Mở file để ghi
+    ofstream file("data.txt");
+
+    // Ghi dữ liệu JSON vào file
+    file << j.dump(4) << endl;
+
+    // Đóng file
+    file.close();
+
+    cout << "Dữ liệu đã được ghi vào file data.txt" << endl;
+
+    return 0;
+}
