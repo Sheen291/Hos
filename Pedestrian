@@ -160,7 +160,7 @@ class Event{
 		vector<vector<double>> intensity;	//python 2i trả về mảng 6 phần tử mảng chứa (43 events) loại ảnh hướng cảm xúc
 		vector<float> allTimeDistances;		//lưu lại thời gian cách nhau giữa 43 event vừa tạo
 			//đang mặc định 43 events
-		Event() : intensity(6, vector<double>(43, 0)), allTimeDistances(43, 0.0f>()) {}
+		Event() : intensity(6, vector<double>(43, 0)), allTimeDistances(43, 0.0f) {}
 
 		Event(const vector<vector<double>>& intensity, const vector<float>& allTimeDistances)
 		: intensity(intensity), allTimeDistances(allTimeDistances) {}
