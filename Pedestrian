@@ -191,7 +191,6 @@ int main() {
 	{0.3, -0.7, 0.9, 0.3, -0.2},
         {0.5, -0.3, 0.5, 0.6, -0.4},
         {0.1, -0.5, 0.1, 0.5, -0.7},
-        // Thêm các mảng khác nếu cần thiết
     };
     vector<float> sampleAllTimeDistances = {0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f};
 
@@ -205,15 +204,37 @@ int main() {
 /*
 int main()
 {
-vector<vector<double>> allEvent(43, vector<double>(6, 0.0));	//43 events, mỗi event có 6 mảng ảnh hưởng
+vector<vector<double>> allEvent(6, vector<double>(43, 0.0));	//43 events, mỗi event có 6 mảng ảnh hưởng
 vector<float> allTimeDistances(43, 0.0f);	//43 khoảng thời gian
 
-for (int i = 0; i < 43; ++i)
+//đọc vào vector allEvents và allTimeDistances từ mã nguồn Python bài 2i để có dữ liệu
+
+for (int i = 0; i < 6; ++i)
 {
-	for (int j = 0; j < 6; ++j) {
+	for (int j = 0; j < 43; ++j) {
 	
+		//Phần này để thêm vào dữ liệu từ python cho allEvents và allTimeDistances	
 	}
 }
+//giả sử đối tượng kiểu Pedestrian được tạo tên a
+
+vector<vector<double>> intensity(6);
+vector<float> timeDistances(20)
+for (int i = 0; i < 20; i++)
+{
+	int X = rand() % 43;
+	for (int j = 0; j < 6; j++)
+	{
+		intensity[j].push_back(allEvent[j][X]);
+	}
+
+	timeDistances[i] = allTimeDistances[X];
+}
+Event newEvent(intensity, timeDistances);
+
+a.setEvent(newEvent);
+//vậy là 1 đối tượng được add vào 20 event với 20 thời gian giữa các event
+//vào trong thuộc tính events bằng setEvent() từ lớp cha Pedestrian
 }
 */
 
@@ -252,7 +273,7 @@ class Pedestrian {
     		void setVelocity(double v) { velocity = v; }
     		void setPersonality(Personality p) { personality = p; }
     		void setEmotion(Emotion e) { emotion = e; }
-		void setEvents(vector<Event> ev) { events = e; }
+		void setEvent(const Event& event) { events.push_back(event); }
     		void setWalkingTime(double wt) { walkingTime = wt; }
     		void setDistance(double d) { distance = d; }
     		void setAge(double a) { age = a; }
