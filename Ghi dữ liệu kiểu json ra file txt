@@ -1,13 +1,27 @@
 
 /***************************TRƯỚC MẮT CỨ CHUNG CHUNG THẾ NÀY ĐÃ, SAU ĐÓ ĐỌC CHIA TỪNG FILE SAU**************************/
+//Để thư viện json.hpp chung file với code thì chạy được luôn còn không thì đổi cái địa chỉ chỗ include đi tí
+//dữ liệu đang là tự thêm vào, sau khi tạo mảng thì:
+/*chuyển mảng đối tượng Pedestrian thành mảng JSON
+    json jsonArray;
+    for (const auto& pedestrian : pedestrians) {	//khai báo vector<Pedestrian> pedestrians ở trên để lưu M đối tượng rồi
+        jsonArray.push_back(pedestrian.to_json());
+    }
 
-//#include <bits/stdc++.h>
+    // Ghi mảng JSON vào tệp
+    ofstream outFile("pedestrians.json");
+    outFile << jsonArray.dump(4);  // dump(4) để format JSON với indent là 4
+    outFile.close();
+*/
+
+
+#include <bits/stdc++.h>
 #include <iostream>
 #include <vector>
 #include <string>
 
-//#include "json.hpp"
-//using json = nlohmann::json;
+#include "json.hpp"
+using json = nlohmann::json;
 
 using namespace std;
 
@@ -73,7 +87,16 @@ public:
     }
 
     json to_json() const{
-      return {{"nameWard", nameWard}, {"Start", start}, {"End", end}, {"Wall", wall}};
+      json wall_json;
+        for (const auto& p : wall) {
+            wall_json.push_back(p.to_json());
+        }
+        return {
+            {"nameWard", nameWard},
+            {"start", start.to_json()},
+            {"end", end.to_json()},
+            {"wall", wall_json}
+        };
     }
 };
 
@@ -207,7 +230,11 @@ class Event{
 class AGVEvent : public Event {
 public:
 	      //chưa có thông tin gì
-      json to_json() const override { json j = Event::to_json(); return j; }
+	    AGVEvent() : Event() {}
+	    AGVEvent(const vector<vector<double>>& intensity, const vector<float>& allTimeDistances)
+        : Event(intensity, allTimeDistances) {}
+        
+    	json to_json() const override { json j = Event::to_json(); return j; }
 };
 
 
@@ -252,7 +279,7 @@ class Pedestrian {
             {"Ward_start", start.to_json()},
             {"Ward_end", end.to_json()},
             {"Velocity", velocity},
-            {"Personality", personality.to_json},  //kiểm tra xem personality có phải nullptr không, nếu có thì sẽ trả về {}
+            {"Personality", personality.to_json()},  //kiểm tra xem personality có phải nullptr không, nếu có thì sẽ trả về {}
             {"Emotion", emotion.to_json()},
             {"Walking_Time", walkingTime},
             {"Distance", distance},
@@ -302,15 +329,15 @@ class Patient : public Pedestrian {
         		end.printWard();
 			}
 
-      /*string walkability_Type(Walkability walkability) const {
+      string walkability_Type(Walkability walkability) const {
 			switch (walkability) {
 				case crutches: 		return "crutches";
 				case sticks:		return "sticks";
-				case wheelchair:	return "wheelchair";
+				case wheelchairs:	return "wheelchairs";
 				case blind:			return "blind";
 				default: return "unknown";
 			}
-		}*/
+		}
 
     json to_json() const override {
       //gọi ra phương thức to_json của Pedestrian
@@ -338,13 +365,13 @@ class Visitor : public Pedestrian {
 			end.printWard();
 		}
 
-    /*string walkability_Type(Walkability walkability) const {
+    string walkability_Type(Walkability walkability) const {
 			switch (walkability) {
 				case noDisabilityNoOvertaking: 		return "noDisabilityNoOvertaking";
 				case noDisabilityOvertaking:		return "noDisabilityOvertaking";
 				default: return "unknown";
 			}
-		}*/
+		}
 
     json to_json() const override {
 			//gọi ra phương thức to_json của Pedestrian
@@ -396,12 +423,16 @@ int main() {
     person.setEmotion(emotion);
 
     // Tạo một đối tượng Event và thiết lập các giá trị
-    Event event;
+    vector<vector<double>> intensity(6, vector<double>(20, 1.0));
+    vector<float> allTimeDistances(20, 2.0f);
+    Event event(intensity, allTimeDistances);
     person.setEvent(event);
 
     // Tạo một đối tượng AGVEvent và thiết lập các giá trị
-    AGVEvent agvEvent;
-    person.setImpactOfAGV(agvEvent);
+    vector<vector<double>> agve(6, vector<double>(5, 0.4));
+    vector<float> time_agve(5, 0.9f);
+    AGVEvent agv_events(agve, time_agve);
+    person.setImpactOfAGV(agv_events);
 
     // Tạo một đối tượng Point và thiết lập các giá trị
     Point tempPoint(4, 4);
@@ -419,7 +450,8 @@ int main() {
     // Đóng file
     file.close();
 
-    cout << "Dữ liệu đã được ghi vào file data.txt" << endl;
+    cout << "Du lieu da duoc nhap vao file data.txt" << endl;
 
     return 0;
 }
+
