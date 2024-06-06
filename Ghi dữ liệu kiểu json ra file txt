@@ -259,14 +259,14 @@ class Pedestrian {
 				velocity(0.0), personality(Personality()), emotion(Emotion()),
 				walkingTime(0.0), distance(0.0), age(0.0), impactOfAGV(AGVEvent()), tempPoints(Point()) {}
 				
-		    void setID(int id) { ID = id; }
+		void setID(int id) { ID = id; }
     		void setStart(Ward s) { start = s; }
     		void setEnd(Ward e) { end = e; }
     		void setJourney(vector<Ward> j) { journey = j; }
     		void setVelocity(double v) { velocity = v; }
     		void setPersonality(Personality p) { personality = p; }
     		void setEmotion(Emotion e) { emotion = e; }
-		    void setEvent(const Event& event) { events.push_back(event); }
+		void setEvent(const Event& event) { events.push_back(event); }
     		void setWalkingTime(double wt) { walkingTime = wt; }
     		void setDistance(double d) { distance = d; }
     		void setAge(double a) { age = a; }
